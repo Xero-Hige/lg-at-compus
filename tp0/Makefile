@@ -1,5 +1,5 @@
 all:
-	gcc -Wall -Wextra --pedantic --std=c99 ./tp.c -o ./tp
+	gcc -Wall -Wextra --pedantic --std=c99 ./tp.c -o ./tp -lm
 
 clean:
 	rm tp *.o
