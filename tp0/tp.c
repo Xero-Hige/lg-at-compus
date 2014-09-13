@@ -4,24 +4,42 @@
 #include <stdbool.h>
 #include <math.h>
 
-#define MAX_ITERATIONS 20
+#define MAX_ITERATIONS 1000
+#define WIDTH 4
+#define HEIGHT 4
+#define RESOLUTION_X 640
+#define RESOLUTION_Y 480
+#define CENTER_REAL 0
+#define CENTER_IMAGINARY 0
+
+float width = WIDTH;
+float height = HEIGHT;
+float resolutionX = RESOLUTION_X;
+float resolutionY = RESOLUTION_Y;
+float centerReal = CENTER_REAL;
+float centerImaginary = CENTER_IMAGINARY;
+
 
 /**
  * Devuelve la parte real de un numero complejo.
- * El primer parámetro es la parte real y el segundo es la imaginaria.
- * HARDCODE
+ * El parámetro es la parte real.
  */
-float getComplexPixelX(float pixelX, float pixelY) {
-	return 200;
+float getComplexPixelX(int pixelX) {
+	float complexResolution = width / resolutionX;
+	float value = (centerReal - (width / 2)) + complexResolution * pixelX;
+	//printf("CENTER REAL: %f - WIDTH: %f - COMPLEX_X: %f\n", centerReal, width, value);
+	return value;
 }
 
 /**
  * Devuelve la parte imaginaria de un numero complejo.
- * El primer parámetro es la parte real y el segundo es la imaginaria.
- * HARDCODE
+ * El parámetro es la parte imaginaria.
  */
-float getComplexPixelY(float pixelX, float pixelY) {
-	return 100;
+float getComplexPixelY(int pixelY) {
+	float complexResolution = height / resolutionY;
+	float value = (centerImaginary - (height / 2)) + complexResolution * pixelY;
+	//printf("CENTER IMAGINARY: %f - HEIGHT: %f - COMPLEX_Y: %f\n", centerImaginary, height, value);
+	return value;
 }
 
 /**
@@ -52,16 +70,19 @@ float getNewIterationY(float pixelX, float pixelY, float initialPixelY) {
  * Devuelve el brillo de un pixel que se recibe por parámetro.
  */
 int getBrightness(int pixelX, int pixelY) {
-	float initialComplexPixelX = getComplexPixelX(pixelX, pixelY);
-	float initialComplexPixelY = getComplexPixelY(pixelX, pixelY);
+	//printf("PIXEL X: %i - PIXEL Y: %i\n", pixelX, pixelY);
+	float initialComplexPixelX = getComplexPixelX(pixelX);
+	float initialComplexPixelY = getComplexPixelY(pixelY);
 	float varComplexPixelX = initialComplexPixelX;
 	float varComplexPixelY = initialComplexPixelY;
 	float previousComplexPixelX, previousComplexPixelY;
 	int brightness;
+	float limitation = 2;
 	for (brightness = 0; brightness < MAX_ITERATIONS - 1; brightness++) {
-		if (getAbsolute(varComplexPixelX, varComplexPixelY) < 2.0) {
+		if (getAbsolute(varComplexPixelX, varComplexPixelY) > limitation) {
 			break;
 		}
+		//printf("COMPLEX_X: %f - COMPLEX_Y: %f\n", varComplexPixelX, varComplexPixelY);
 		previousComplexPixelX = varComplexPixelX;
 		previousComplexPixelY = varComplexPixelY;
 		varComplexPixelX = getNewIterationX(previousComplexPixelX,
@@ -74,15 +95,6 @@ int getBrightness(int pixelX, int pixelY) {
 
 int main(int argc, char **argv) {
 	int c;
-
-	long int widht = 4;
-	long int height = 4;
-
-	double pixels_widht = 600;
-	double pixels_height = 400;
-
-	double center_x = 0;
-	double center_y = 0;
 
 	/**
 	 char a = 'a';
@@ -141,19 +153,10 @@ int main(int argc, char **argv) {
 	 }
 	 }*/
 
-	double x_pixel_widht = (widht / pixels_widht);
-	double y_pixel_widht = (height / pixels_height);
-
-	double initial_x = center_x - (x_pixel_widht / 2);
-	double initial_y = center_y - (y_pixel_widht / 2);
-
-	for (int x = 0; x < pixels_widht; x++) {
-		for (int y = 0; y < pixels_height; y++) {
-			double pos_x = initial_x + (x_pixel_widht * x);
-			double pos_y = initial_y + (y_pixel_widht * y);
-			printf("%f+%f i (%d)\n", pos_x, pos_y, getBrightness(pos_x, pos_y));
+	for (int pixelX = 0; pixelX <= resolutionX; pixelX++) {
+		for (int pixelY = 0; pixelY <= resolutionY; pixelY++) {
+			printf("PIXEL X: %i, PIXEL Y: %i, BRILLO: %i\n", pixelX, pixelY, getBrightness(pixelX, pixelY));
 		}
-
 	}
 
 }
