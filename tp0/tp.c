@@ -1,8 +1,9 @@
+#include <getopt.h>
+#include <math.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <getopt.h>
-#include <stdbool.h>
-#include <math.h>
+#include <string.h>
 
 #define MAX_ITERATIONS 255
 #define WIDTH 0.005
@@ -92,11 +93,29 @@ int getBrightness(int pixelX, int pixelY) {
 	return brightness;
 }
 
+void print_fractal(int resolutionX, int resolutionY, char* output_file) {
+	FILE* output;
+	if (strcmp("-", output_file) != 0) {
+		output = fopen(output_file, "w");
+	} else {
+		output = stdout;
+	}
+	fprintf(output, "P2\n%d %d\n%d\n", resolutionX, resolutionY,
+			MAX_ITERATIONS);
+	for (int pixelX = 0; pixelX <= resolutionX; pixelX++) {
+		for (int pixelY = 0; pixelY <= resolutionY; pixelY++) {
+			fprintf(output, "%d ", getBrightness(pixelX, pixelY));
+		}
+		fprintf(output, "\n");
+	}
+	fclose(output);
+}
+
 int main(int argc, char **argv) {
 	int c;
-
-	char a = 'a';
 	char** end_ptr = NULL;
+
+	char* output_file = "-";
 
 	while (true) {
 		static struct option long_options[] = {
@@ -110,52 +129,51 @@ int main(int argc, char **argv) {
 				{ 0, 0, 0, 0 }
 		};
 		int option_index = 0;
-		c = getopt_long(argc, argv, "rcwHo:h:", long_options, &option_index);
+		c = getopt_long(argc, argv, "r:c:w:H:o:h:", long_options, &option_index);
 		/* Detect the end of the options. */
 		if (c == -1)
 			break;
 
 		switch (c) {
-		case 'r':
-			puts("option -r\n");
-			break;
-		case 'c':
-			puts("option -c\n");
-			break;
-		case 'w':
-			strtol(optarg, end_ptr, 10);
-			if (end_ptr) {
-				printf("El parametro de w no es un numero");
-				return 2;
-			}
-			printf("option -w with value `%s'\n", optarg);
-			break;
-		case 'H':
-			printf("option -H with value `%s'\n", optarg);
-			break;
-		case 'f':
-			printf("option -f with value `%s'\n", optarg);
-			break;
-		case 'h':
-			printf("option -h\n");
-			break;
-		case '?':
-			break;
-		default:
-			break;
+			case 'r':
+				puts("option -r\n");
+				break;
+
+			case 'c':
+				puts("option -c\n");
+				break;
+
+			case 'w':
+				width = strtod(optarg, end_ptr);
+				if (end_ptr) {
+					printf("DEBUG: El parametro de w no es un numero");
+					return 2;
+				}
+				break;
+
+			case 'H':
+				height = strtod(optarg, end_ptr);
+				if (end_ptr) {
+					printf("DEBUG: El parametro de H no es un numero");
+					return 2;
+				}
+				break;
+
+			case 'o':
+				output_file = optarg;
+				break;
+
+			case 'h':
+				printf("option -h\n");
+				break;
+
+			case '?':
+				break;
+
+			default:
+				break;
 		}
 	}
 
-	FILE* output = fopen("a.pgm","w");
-	fprintf(output,"P2\n%d %d\n%d\n",resolutionX,resolutionY,MAX_ITERATIONS);
-
-	for (int pixelX = 0; pixelX <= resolutionX; pixelX++) {
-		for (int pixelY = 0; pixelY <= resolutionY; pixelY++) {
-			//printf("PIXEL X: %i, PIXEL Y: %i, BRILLO: %i\n", pixelX, pixelY,getBrightness(pixelX, pixelY));
-			fprintf(output,"%d ",getBrightness(pixelX, pixelY));
-		}
-		fprintf(output,"\n");
-	}
-
-	fclose(output);
+	print_fractal(resolutionX, resolutionY, output_file);
 }
