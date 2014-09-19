@@ -6,12 +6,12 @@
 #include <string.h>
 
 #define MAX_ITERATIONS 256
-#define WIDTH 2//0.0050
-#define HEIGHT 2//0.0050
-#define RESOLUTION_X 50//500
-#define RESOLUTION_Y 50//500
-#define CENTER_REAL 0//0.2820
-#define CENTER_IMAGINARY 0//-0.0100
+#define WIDTH 4
+#define HEIGHT 2
+#define RESOLUTION_X 500
+#define RESOLUTION_Y 200
+#define CENTER_REAL 0
+#define CENTER_IMAGINARY 0
 
 static double width = WIDTH;
 static double height = HEIGHT;
@@ -19,29 +19,6 @@ static int resolutionX = RESOLUTION_X;
 static int resolutionY = RESOLUTION_Y;
 static double centerReal = CENTER_REAL;
 static double centerImaginary = CENTER_IMAGINARY;
-
-/**
- * Devuelve la parte real de un numero complejo.
- * El parámetro es la parte real.
- */
-double getComplexPixelX(int pixelX) {
-	double complexResolution = width / resolutionX;
-	double value = (centerReal - (width / 2)) + complexResolution * pixelX;
-	//printf("CENTER REAL: %f - WIDTH: %f - COMPLEX_X: %f\n", centerReal, width, value);
-	return value;
-}
-
-/**
- * Devuelve la parte imaginaria de un numero complejo.
- * El parámetro es la parte imaginaria.
- */
-double getComplexPixelY(int pixelY) {
-	double complexResolution = height / resolutionY;
-	double value = (centerImaginary + (height / 2))
-					- complexResolution * pixelY;
-	//printf("CENTER IMAGINARY: %f - HEIGHT: %f - COMPLEX_Y: %f\n", centerImaginary, height, value);
-	return value;
-}
 
 /**
  * Devuelve el módulo de un numero complejo.
@@ -64,18 +41,16 @@ double getNewIterationX(double pixelX, double pixelY, double initialPixelX) {
  * Trae la parte imaginaria de la nueva iteración. 
  */
 double getNewIterationY(double pixelX, double pixelY, double initialPixelY) {
-	return 2*(pixelX * pixelY) + initialPixelY;
+	return 2 * (pixelX * pixelY) + initialPixelY;
 }
 
 /**
  * Devuelve el brillo de un pixel que se recibe por parámetro.
  */
-int getBrightness(int pixelX, int pixelY) {
-	printf("PIXEL X: %i - PIXEL Y: %i\n", pixelX, pixelY);
-	double initialComplexPixelX = getComplexPixelX(pixelX);
-	double initialComplexPixelY = getComplexPixelY(pixelY);
-	double varComplexPixelX = initialComplexPixelX;
-	double varComplexPixelY = initialComplexPixelY;
+int getBrightness(double x, double y) {
+	printf("PIXEL X: %f - PIXEL Y: %f\n", x, y);
+	double varComplexPixelX = x;
+	double varComplexPixelY = y;
 	double previousComplexPixelX, previousComplexPixelY;
 	int brightness;
 	double limitation = 2;
@@ -84,18 +59,17 @@ int getBrightness(int pixelX, int pixelY) {
 		if (getAbsolute(varComplexPixelX, varComplexPixelY) > limitation) {
 			break;
 		}
-		//
 		previousComplexPixelX = varComplexPixelX;
 		previousComplexPixelY = varComplexPixelY;
 		varComplexPixelX = getNewIterationX(previousComplexPixelX,
-				previousComplexPixelY, initialComplexPixelX);
+				previousComplexPixelY, x);
 		varComplexPixelY = getNewIterationY(previousComplexPixelX,
-				previousComplexPixelY, initialComplexPixelY);
+				previousComplexPixelY, y);
 	}
 	return brightness;
 }
 
-void print_fractal(int resolutionX, int resolutionY, char* output_file) {
+void print_fractal(char* output_file) {
 	FILE* output;
 	if (strcmp("-", output_file) != 0) {
 		output = fopen(output_file, "w");
@@ -104,9 +78,13 @@ void print_fractal(int resolutionX, int resolutionY, char* output_file) {
 	}
 	fprintf(output, "P2\n%d %d\n%d\n", resolutionX, resolutionY,
 			MAX_ITERATIONS);
-	for (int pixelY = 0; pixelY <= resolutionY; pixelY++) {
-			for (int pixelX = 0; pixelX <= resolutionX; pixelX++) {
-			fprintf(output, "%d \n", getBrightness(pixelX, pixelY));
+	double deltaX = width / resolutionX;
+	double maxReal = centerReal + width / 2;
+	double maxImaginary = centerImaginary + height / 2;
+	double deltaY = height / resolutionY;
+	for (double y = centerImaginary - height / 2; y <= maxImaginary; y += deltaY) {
+		for (double x = centerReal - width / 2; x <= maxReal; x += deltaX) {
+			fprintf(output, "%d \n", getBrightness(x, y));
 		}
 		fprintf(output, "\n");
 	}
@@ -175,5 +153,5 @@ int main(int argc, char **argv) {
 		}
 	}
 
-	print_fractal(resolutionX, resolutionY, output_file);
+	print_fractal(output_file);
 }
