@@ -82,12 +82,20 @@ void print_fractal(char* output_file) {
 	double maxReal = centerReal + width / 2;
 	double maxImaginary = centerImaginary + height / 2;
 	double deltaY = height / resolutionY;
-	for (double y = centerImaginary - height / 2; y <= maxImaginary; y +=
+	int count_y = 0;
+	for (double y = centerImaginary - height / 2; y < maxImaginary; y +=
 			deltaY) {
-		for (double x = centerReal - width / 2; x <= maxReal; x += deltaX) {
-			fprintf(output, "%d \n", getBrightness(x, y));
+		if (count_y >= resolutionY)
+			break;
+		int count_x = 0;
+		for (double x = centerReal - width / 2; x < maxReal; x += deltaX) {
+			if (count_x>=resolutionX)
+				break;
+			fprintf(output, "%d ", getBrightness(x, y));
+			count_x++;
 		}
 		fprintf(output, "\n");
+		count_y++;
 	}
 	fclose(output);
 }
@@ -110,7 +118,7 @@ bool parse_center(char* str_dimensions, double* real, double* imaginary) {
 
 	*imaginary = 1;
 
-	if (*end_ptr == '-') {
+	if (*end_ptr == '+') {
 		*imaginary = -1;
 	}
 
