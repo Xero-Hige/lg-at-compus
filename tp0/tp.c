@@ -7,9 +7,9 @@
 
 #define MAX_ITERATIONS 256
 #define WIDTH 4
-#define HEIGHT 2
+#define HEIGHT 4
 #define RESOLUTION_X 500
-#define RESOLUTION_Y 200
+#define RESOLUTION_Y 500
 #define CENTER_REAL 0
 #define CENTER_IMAGINARY 0
 
@@ -48,13 +48,13 @@ double getNewIterationY(double pixelX, double pixelY, double initialPixelY) {
  * Devuelve el brillo de un pixel que se recibe por parámetro.
  */
 int getBrightness(double x, double y) {
-	printf("PIXEL X: %f - PIXEL Y: %f\n", x, y);
+	//printf("PIXEL X: %f - PIXEL Y: %f\n", x, y);
 	double varComplexPixelX = x;
 	double varComplexPixelY = y;
 	double previousComplexPixelX, previousComplexPixelY;
 	int brightness;
 	double limitation = 2;
-	printf("COMPLEX_X: %f + COMPLEX_Y: %f\n", varComplexPixelX, varComplexPixelY);
+	//printf("COMPLEX_X: %f + COMPLEX_Y: %f\n", varComplexPixelX, varComplexPixelY);
 	for (brightness = 0; brightness < MAX_ITERATIONS - 1; brightness++) {
 		if (getAbsolute(varComplexPixelX, varComplexPixelY) > limitation) {
 			break;
@@ -77,18 +77,76 @@ void print_fractal(char* output_file) {
 		output = stdout;
 	}
 	fprintf(output, "P2\n%d %d\n%d\n", resolutionX, resolutionY,
-			MAX_ITERATIONS);
+	MAX_ITERATIONS);
 	double deltaX = width / resolutionX;
 	double maxReal = centerReal + width / 2;
 	double maxImaginary = centerImaginary + height / 2;
 	double deltaY = height / resolutionY;
-	for (double y = centerImaginary - height / 2; y <= maxImaginary; y += deltaY) {
+	for (double y = centerImaginary - height / 2; y <= maxImaginary; y +=
+			deltaY) {
 		for (double x = centerReal - width / 2; x <= maxReal; x += deltaX) {
 			fprintf(output, "%d \n", getBrightness(x, y));
 		}
 		fprintf(output, "\n");
 	}
 	fclose(output);
+}
+
+bool parse_center(char* str_dimensions, double* real, double* imaginary) {
+	char* end_ptr;
+
+	*real = 1;
+
+	if (str_dimensions[0] == '-') {
+		str_dimensions++;
+		*real = -1;
+	}
+
+	*real *= strtod(str_dimensions, &end_ptr);
+	if (*end_ptr != '+' && *end_ptr != '-') {
+		printf("DEBUG: El primer parametro de r no es un numero\n");
+		return false;
+	}
+
+	*imaginary = 1;
+
+	if (*end_ptr == '-') {
+		*imaginary = -1;
+	}
+
+	str_dimensions = end_ptr + 1;
+
+	*imaginary *= strtod(str_dimensions, &end_ptr);
+	if (*end_ptr != 'i') {
+		printf("DEBUG: El segundo parametro de r no es un numero \n");
+		return false;
+	}
+
+	return true;
+}
+
+bool parse_dimensions(char* str_dimensions, int* width, int* height) {
+	char* end_ptr;
+
+	*width = strtol(str_dimensions, &end_ptr, 10);
+	if (*end_ptr != 'x') {
+		printf("DEBUG: El primer parametro de r no es un numero\n");
+		return false;
+	}
+	str_dimensions = end_ptr + 1;
+
+	*height = strtol(str_dimensions, &end_ptr, 10);
+	if (*end_ptr != 0) {
+		printf("DEBUG: El segundo parametro de r no es un numero \n");
+		return false;
+	}
+
+	if (*width <= 0 || *height <= 0) {
+		printf("DEBUG: El parametro de r no es valido\n");
+		return false;
+	}
+
+	return true;
 }
 
 int main(int argc, char **argv) {
@@ -99,12 +157,12 @@ int main(int argc, char **argv) {
 
 	while (true) {
 		static struct option long_options[] = {
-				/* These options set a flag. */
-				{ "resolution", required_argument, 0, 'r' }, { "center",
-						required_argument, 0, 'c' }, { "width", required_argument, 0, 'w' }, {
-								"height", required_argument, 0, 'H' }, { "output",
-										required_argument, 0, 'o' }, { "help",
-												no_argument, 0, 'h' }, { 0, 0, 0, 0 } };
+		/* These options set a flag. */
+		{ "resolution", required_argument, 0, 'r' }, { "center",
+		required_argument, 0, 'c' }, { "width", required_argument, 0, 'w' }, {
+				"height", required_argument, 0, 'H' }, { "output",
+		required_argument, 0, 'o' }, { "help",
+		no_argument, 0, 'h' }, { 0, 0, 0, 0 } };
 		int option_index = 0;
 		c = getopt_long(argc, argv, "r:c:w:H:o:h:", long_options,
 				&option_index);
@@ -114,11 +172,14 @@ int main(int argc, char **argv) {
 
 		switch (c) {
 		case 'r':
-			puts("option -r\n");
+			if (!parse_dimensions(optarg, &resolutionX, &resolutionY))
+				return 2;
 			break;
 
 		case 'c':
-			puts("option -c\n");
+
+			if (!parse_center(optarg, &centerReal, &centerImaginary))
+				return 2;
 			break;
 
 		case 'w':
