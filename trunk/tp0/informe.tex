@@ -1,0 +1,126 @@
+\documentclass[10pt,spanish,a4paper,openany,notitlepage]{article}
+%-------------------------------------Paquetes-----------------------------------------------------------------------
+\usepackage[spanish]{babel}  % Traduce los textos a castellano
+\usepackage[utf8]{inputenc}	% Permite escribir directamente áéíóúñ
+\usepackage{t1enc}            	% Agrega caracteres extendidos al font
+\usepackage{amsmath} 		%Permite imprimir mas opcciones matematicas
+\usepackage{graphicx}		%Permite agregar imagenes al informe
+\usepackage{multicol}  		%Permite dividir el texto en varias columnas
+\usepackage{anysize}		%Permite modificar los margenes del documento
+\usepackage{float} 			%Permite utilizar H para colocar las imagenes en un lugar especifico 
+\usepackage{multirow}		%Permite dividir las tablas en subtablas
+\usepackage{booktabs}		%Permiten manejar mejor el tamaño de las tablas
+\usepackage{tabulary}		%Permiten manejar mejor el tamaño de las tablas
+\usepackage{fancyhdr}		%Permite agregar encabezado y pie fancy
+
+\usepackage{courier}		%
+\usepackage{color}			%
+\usepackage{listings}  		%Permite agregar codigo directamente sobre el documento
+
+%---------------------------------------Definiciones propias---------------------------------------------------------
+\newcommand{\grad}{\hspace{-2mm}$\phantom{a}^{\circ}$} %El º que no existe como comando
+\newcommand{\oiint}{\displaystyle\bigcirc\!\!\!\!\!\!\!\!\int\!\!\!\!\!\int} %Integral doble cerrada
+%------------------------------------------------------------------------------------------------------------------------
+
+%-------------------------------------Configuracion De Codigo----------------------------------
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+
+\lstset{language=C,
+	breaklines=true,
+	keywordstyle=\bf\color{blue},
+	commentstyle=\tt\it\color{dkgreen},
+	stringstyle=\color{gray},
+ 	numbers=left,
+	numberstyle=\tiny\color{black},
+	stepnumber=2,
+	numbersep=8pt,
+	backgroundcolor=\color{white},
+	tabsize=4,
+	showspaces=false,
+	showstringspaces=false}
+
+\newcommand{\captionlisting}[2][]{%
+    \lstinputlisting[caption={\large{\detokenize{#2}}},#1]{#2}%
+}
+
+\renewcommand\lstlistingname{Archivo}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Título principal del documento.
+\title{		\textbf{Trabajo práctico }}
+
+% Información sobre los autores.
+\author{	Nombre y Apellido de Autor, \textit{Padrón Nro. 00000}                    \\
+            \texttt{ dirección de e-mail }                                              			\\
+            Nombre y Apellido de Autor, \textit{Padrón Nro. 00000}                     	\\
+            \texttt{ dirección de e-mail }                                              			\\
+            Nombre y Apellido de Autor, \textit{Padrón Nro. 00000}                	\\
+            \texttt{ dirección de e-mail }                                              			\\
+            Nombre y Apellido de Autor, \textit{Padrón Nro. 00000}                     	\\
+            \texttt{ dirección de e-mail }                                              			\\[2.5ex]
+            \normalsize{Grupo Nro. ? - 2do. Cuatrimestre de 2014}                       	\\
+            \normalsize{66.20 Organización de Computadoras - Práctica Martes}  	\\
+            \normalsize{Facultad de Ingeniería, Universidad de Buenos Aires}     	\\
+       }
+\date{}
+
+\begin{document}
+\setcounter{page}{0} %De esta manera no se numera la carátula
+% Inserta el título.
+\maketitle
+
+% Quita el número en la primer página.
+\thispagestyle{empty}
+
+% Resumen
+\begin{abstract}
+no más de 150 palabras
+\end{abstract}
+ 
+\newpage
+
+\section{Introducción}
+
+\section{Desarrollo}
+
+\section{Conclusiones}
+
+
+\newpage
+\appendix
+\section{Codigo C}
+
+\captionlisting{../arg_parse.h}
+\captionlisting{../arg_parse.c}
+
+\captionlisting{../base_64.h}
+\captionlisting{../base_64.c}
+
+\captionlisting{../main.c}
+\newpage
+\section{Makefile}
+
+\lstinputlisting[language=make,
+			breaklines=true,
+			keywordstyle=\bf\color{blue},
+			commentstyle=\tt\it\color{dkgreen},
+			stringstyle=\color{gray},
+ 			numbers=left,
+			numberstyle=\tiny\color{black},
+			stepnumber=1,
+			numbersep=8pt,
+			backgroundcolor=\color{white},
+			tabsize=4,
+			showspaces=false,
+			showstringspaces=false]{../Makefile}
+
+\newpage
+% Citas bibliográficas.
+\begin{thebibliography}{99} %Hasta 99 
+
+\bibitem{?}
+
+\end{thebibliography}
+
+\end{document}

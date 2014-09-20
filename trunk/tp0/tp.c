@@ -5,11 +5,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_ITERATIONS 256
+#define MAX_ITERATIONS 255
 #define WIDTH 4
 #define HEIGHT 4
-#define RESOLUTION_X 500
-#define RESOLUTION_Y 500
+#define RESOLUTION_X 640
+#define RESOLUTION_Y 480
 #define CENTER_REAL 0
 #define CENTER_IMAGINARY 0
 
@@ -69,35 +69,47 @@ int getBrightness(double x, double y) {
 	return brightness;
 }
 
-void print_fractal(char* output_file) {
+int print_fractal(char* output_file) {
 	FILE* output;
+
 	if (strcmp("-", output_file) != 0) {
 		output = fopen(output_file, "w");
 	} else {
 		output = stdout;
 	}
-	fprintf(output, "P2\n%d %d\n%d\n", resolutionX, resolutionY,
+
+	if (!output){
+		fprintf(stderr,"fatal: cannot open output file.\n");
+		return 3;
+	}
+
+	fprintf(output, "P2\n%d\n%d\n%d\n", resolutionX, resolutionY,
 	MAX_ITERATIONS);
 	double deltaX = width / resolutionX;
 	double maxReal = centerReal + width / 2;
 	double maxImaginary = centerImaginary + height / 2;
 	double deltaY = height / resolutionY;
-	int count_y = 0;
+	int count_y = 0; //Cuenta iteraciones en y para que no superen el alto
 	for (double y = centerImaginary - height / 2; y < maxImaginary; y +=
 			deltaY) {
+
 		if (count_y >= resolutionY)
 			break;
-		int count_x = 0;
+
+		int count_x = 0; //Cuenta iteraciones en x para que no superen el ancho
+
 		for (double x = centerReal - width / 2; x < maxReal; x += deltaX) {
-			if (count_x>=resolutionX)
+			if (count_x >= resolutionX)
 				break;
 			fprintf(output, "%d ", getBrightness(x, y));
 			count_x++;
 		}
+
 		fprintf(output, "\n");
 		count_y++;
 	}
 	fclose(output);
+	return 0;
 }
 
 bool parse_center(char* str_dimensions, double* real, double* imaginary) {
@@ -112,7 +124,7 @@ bool parse_center(char* str_dimensions, double* real, double* imaginary) {
 
 	*real *= strtod(str_dimensions, &end_ptr);
 	if (*end_ptr != '+' && *end_ptr != '-') {
-		printf("DEBUG: El primer parametro de r no es un numero\n");
+		fprintf(stderr,"fatal: invalid center specification.\n");
 		return false;
 	}
 
@@ -126,7 +138,7 @@ bool parse_center(char* str_dimensions, double* real, double* imaginary) {
 
 	*imaginary *= strtod(str_dimensions, &end_ptr);
 	if (*end_ptr != 'i') {
-		printf("DEBUG: El segundo parametro de r no es un numero \n");
+		fprintf(stderr,"fatal: invalid center specification.\n");
 		return false;
 	}
 
@@ -193,7 +205,7 @@ int main(int argc, char **argv) {
 		case 'w':
 			width = strtod(optarg, end_ptr);
 			if (end_ptr) {
-				printf("DEBUG: El parametro de w no es un numero");
+				printf("fatal: width is not a valid number");
 				return 2;
 			}
 			break;
@@ -201,7 +213,7 @@ int main(int argc, char **argv) {
 		case 'H':
 			height = strtod(optarg, end_ptr);
 			if (end_ptr) {
-				printf("DEBUG: El parametro de H no es un numero");
+				printf("fatal: height is not a valid number");
 				return 2;
 			}
 			break;
@@ -222,5 +234,5 @@ int main(int argc, char **argv) {
 		}
 	}
 
-	print_fractal(output_file);
+	return print_fractal(output_file);
 }
