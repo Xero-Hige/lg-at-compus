@@ -12,6 +12,7 @@
 \usepackage{booktabs}		%Permiten manejar mejor el tamaño de las tablas
 \usepackage{tabulary}		%Permiten manejar mejor el tamaño de las tablas
 \usepackage{fancyhdr}		%Permite agregar encabezado y pie fancy
+\usepackage{framed}
 
 \usepackage{courier}		%
 \usepackage{color}			%
@@ -38,6 +39,7 @@
 	backgroundcolor=\color{white},
 	tabsize=4,
 	showspaces=false,
+	inputencoding=latin2,
 	showstringspaces=false}
 
 \newcommand{\captionlisting}[2][]{%
@@ -48,15 +50,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Título principal del documento.
-\title{		\textbf{Trabajo práctico }}
+\title{\textbf{TP0}\\ Generador de fractales de Mandelbrot}
 
 % Información sobre los autores.
-\author{	Nombre y Apellido de Autor, \textit{Padrón Nro. 00000}                    \\
+\author{Gallipi Leandro, \textit{Padrón Nro. 00000}                    \\
             \texttt{ dirección de e-mail }                                              			\\
-            Nombre y Apellido de Autor, \textit{Padrón Nro. 00000}                     	\\
-            \texttt{ dirección de e-mail }                                              			\\
-            Nombre y Apellido de Autor, \textit{Padrón Nro. 00000}                	\\
-            \texttt{ dirección de e-mail }                                              			\\
+            Martinez Gaston Alberto, \textit{Padrón Nro. 91383}                     	\\
+            \texttt{ dirección de e-mail }                                            			\\
             Nombre y Apellido de Autor, \textit{Padrón Nro. 00000}                     	\\
             \texttt{ dirección de e-mail }                                              			\\[2.5ex]
             \normalsize{Grupo Nro. ? - 2do. Cuatrimestre de 2014}                       	\\
@@ -67,7 +67,7 @@
 
 \begin{document}
 \setcounter{page}{0} %De esta manera no se numera la carátula
-% Inserta el título.
+
 \maketitle
 
 % Quita el número en la primer página.
@@ -75,7 +75,8 @@
 
 % Resumen
 \begin{abstract}
-no más de 150 palabras
+El presente trabajo busca, mediante la implementando un programa que genera fractales, familiarizarse con las herramientas de software que usaremos en los siguientes trabajos.\\
+Para ello, se desarrollara en C y se vera su portabilidad entre sistemas con una arquitectura i386 / Amd64 y una arquitectura MIPS32
 \end{abstract}
  
 \newpage
@@ -84,20 +85,39 @@ no más de 150 palabras
 
 \section{Desarrollo}
 
-\section{Conclusiones}
+\section{Compilacion}
 
+El presente trabajo incluye un script de \textit{Makefile} para realizar la compilacion de manera automatica. Suponiendo que se este en un sistema Linux con la herramienta \textit{make} instalada \footnote{La misma esta presente en la mayoria de los sistemas Linux, pero pude que requiera ser instalada manualmente} para compilar el trabajo solo es necesario ejecutar:
+
+\begin{framed}
+\begin{verbatim}    $ make\end{verbatim}
+\end{framed}
+
+Ademas, se provee de un comando para la limpieza de los archivos extras y el ejecutable. El mismo se ejecuta mediante el comando:
+
+\begin{framed}
+\begin{verbatim}    $ make clean\end{verbatim}
+\end{framed}
+
+\section{Ejecuciones de prueba}
+
+\begin{enumerate}
+\item Ejecucion normal 
+\begin{framed}
+\begin{verbatim}$ ./tp \end{verbatim}
+\end{framed}
+\end{enumerate}
+
+Genera por defecto el archivo \texttt{out.pgm} con el fractal de mandelbrot centrado en el 0+0i, en un espacio de 4x4, con una resolucion de 640x480.
+
+%\includegraphics[]{out.pgm}
 
 \newpage
 \appendix
 \section{Codigo C}
 
-\captionlisting{../arg_parse.h}
-\captionlisting{../arg_parse.c}
+\captionlisting{tp.c}
 
-\captionlisting{../base_64.h}
-\captionlisting{../base_64.c}
-
-\captionlisting{../main.c}
 \newpage
 \section{Makefile}
 
@@ -113,7 +133,7 @@ no más de 150 palabras
 			backgroundcolor=\color{white},
 			tabsize=4,
 			showspaces=false,
-			showstringspaces=false]{../Makefile}
+			showstringspaces=false]{Makefile}
 
 \newpage
 % Citas bibliográficas.
