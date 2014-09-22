@@ -56,7 +56,7 @@
 \author{Gallipi Leandro, \textit{Padrón Nro. 00000}                    \\
             \texttt{ dirección de e-mail }                                              			\\
             Martinez Gaston Alberto, \textit{Padrón Nro. 91383}                     	\\
-            \texttt{ dirección de e-mail }                                            			\\
+            \texttt{gaston.martinez.90@gmail.com}                                            			\\
             Nombre y Apellido de Autor, \textit{Padrón Nro. 00000}                     	\\
             \texttt{ dirección de e-mail }                                              			\\[2.5ex]
             \normalsize{Grupo Nro. ? - 2do. Cuatrimestre de 2014}                       	\\
@@ -102,15 +102,97 @@ Ademas, se provee de un comando para la limpieza de los archivos extras y el eje
 \section{Ejecuciones de prueba}
 
 \begin{enumerate}
+
 \item Ejecucion normal 
 \begin{framed}
 \begin{verbatim}$ ./tp \end{verbatim}
 \end{framed}
+
+Genera por defecto el archivo \texttt{out.pgm} con el fractal de mandelbrot centrado en el 0+0i, en un espacio de 4x4, con una resolucion de 640x480. (Figura \ref{test1} Pag \pageref{test1})
+
+\begin{figure}[hbt]
+\centering
+\includegraphics[width=0.25\textwidth]{out.jpg}
+\caption{out.pgm}
+\label{test1}
+\end{figure}
+
+\item Ejecucion reducida
+\begin{framed}
+\begin{verbatim}$ ./tp -r 30x30 \end{verbatim}
+\end{framed}
+
+Genera por defecto el archivo \texttt{out.pgm} con el fractal de mandelbrot centrado en el 0+0i, en un espacio de 4x4, con una resolucion de 30x30. (Figura \ref{test2} Pag \pageref{test2})
+
+\begin{figure}[hbt]
+\centering
+\includegraphics[]{out2.jpg}
+\caption{out.pgm}
+\label{test2}
+\end{figure}
+
+\item Ejecucion desplazada 1
+\begin{framed}
+\begin{verbatim}$ ./tp -c 1+0i \end{verbatim}
+\end{framed}
+
+Genera por defecto el archivo \texttt{out.pgm} con el fractal de mandelbrot centrado en el 1+0i, en un espacio de 4x4, con una resolucion de 640x480. (Figura \ref{test3} Pag \pageref{test3})
+
+\begin{figure}[hbt]
+\centering
+\includegraphics[width=0.25\textwidth]{out3.jpg}
+\caption{out.pgm}
+\label{test3}
+\end{figure}
+
+\item Ejecucion desplazada 2
+\begin{framed}
+\begin{verbatim}$ ./tp -c 0-1i \end{verbatim}
+\end{framed}
+
+Genera por defecto el archivo \texttt{out.pgm} con el fractal de mandelbrot centrado en el 1+0i, en un espacio de 4x4, con una resolucion de 640x480. (Figura \ref{test4} Pag \pageref{test4})
+
+\begin{figure}[hbt]
+\centering
+\includegraphics[width=0.25\textwidth]{out4.jpg}
+\caption{out.pgm}
+\label{test4}
+\end{figure}
+
+\item Ejecucion deformada 1
+\begin{framed}
+\begin{verbatim}$./tp -H 2\end{verbatim}
+\end{framed}
+
+Genera por defecto el archivo \texttt{out.pgm} con el fractal de mandelbrot centrado en el 0+0i, en un espacio de 2x4, con una resolucion de 640x480. (Figura \ref{test5} Pag \pageref{test5})
+
+\begin{figure}[hbt]
+\centering
+\includegraphics[width=0.25\textwidth]{out5.jpg}
+\caption{out.pgm}
+\label{test5}
+\end{figure}
+
+\item Ejecucion deformada 2
+\begin{framed}
+\begin{verbatim}$./tp -w 2\end{verbatim}
+\end{framed}
+
+Genera por defecto el archivo \texttt{out.pgm} con el fractal de mandelbrot centrado en el 0+0i, en un espacio de 4x2, con una resolucion de 640x480. (Figura \ref{test6} Pag \pageref{test6})
+
+\begin{figure}[hbt]
+\centering
+\includegraphics[width=0.25\textwidth]{out6.jpg}
+\caption{out.pgm}
+\label{test6}
+\end{figure}
+
 \end{enumerate}
 
-Genera por defecto el archivo \texttt{out.pgm} con el fractal de mandelbrot centrado en el 0+0i, en un espacio de 4x4, con una resolucion de 640x480.
 
-%\includegraphics[]{out.pgm}
+
+
+
 
 \newpage
 \appendix

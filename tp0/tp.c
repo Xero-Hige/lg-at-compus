@@ -173,7 +173,7 @@ int main(int argc, char **argv) {
 	int c;
 	char** end_ptr = NULL;
 
-	char* output_file = "-";
+	char* output_file = "out.pgm";
 
 	while (true) {
 		static struct option long_options[] = {
