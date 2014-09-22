@@ -187,9 +187,72 @@ Genera por defecto el archivo \texttt{out.pgm} con el fractal de mandelbrot cent
 \label{test6}
 \end{figure}
 
+
+\item Ejecucion deformada combinada 1
+\begin{framed}
+\begin{verbatim}$./tp -H 2 -r 240x480\end{verbatim}
+\end{framed}
+
+Genera por defecto el archivo \texttt{out.pgm} con el fractal de mandelbrot centrado en el 0+0i, en un espacio de 4x2, con una resolucion de 240x480. (Figura \ref{test7} Pag \pageref{test7})
+
+\begin{figure}[hbt]
+\centering
+\includegraphics[width=0.25\textwidth]{out7.jpg}
+\caption{out.pgm}
+\label{test7}
+\end{figure}
+
+\item Ejecucion deformada combinada 2
+\begin{framed}
+\begin{verbatim}$./tp -w 2 -r 600x100\end{verbatim}
+\end{framed}
+
+Genera por defecto el archivo \texttt{out.pgm} con el fractal de mandelbrot centrado en el 0+0i, en un espacio de 4x2, con una resolucion de 600x100. (Figura \ref{test8} Pag \pageref{test8})
+
+\begin{figure}[hbt]
+\centering
+\includegraphics[width=0.25\textwidth]{out8.jpg}
+\caption{out.pgm}
+\label{test8}
+\end{figure}
+
+\item Ejecucion con zona amplificada
+\begin{framed}
+\begin{verbatim}$./tp -c +0.282-0.01i -w 0.005 -H 0.005 -r 1000x1000\end{verbatim}
+\end{framed}
+
+Genera por defecto el archivo \texttt{out.pgm} con el fractal de mandelbrot centrado en el 0.282-0.01i, en un espacio de 0.005x0.005, con una resolucion de 1000x1000. (Figura \ref{test9} Pag \pageref{test9})
+
+\begin{figure}[hbt]
+\centering
+\includegraphics[width=0.25\textwidth]{out9.jpg}
+\caption{out.pgm}
+\label{test9}
+\end{figure}
+
 \end{enumerate}
 
+\item Ejecucion por consola
+\begin{framed}
+\begin{verbatim}$./tp -r 1x1 -o -\end{verbatim}
+\end{framed}
+Da como resultado la siguiente salida
+\begin{framed}
+\begin{verbatim}P2
+1
+1
+255
+0\end{verbatim}
+\end{framed}
 
+\begin{figure}[hbt]
+\centering
+\includegraphics[width=0.25\textwidth]{out9.jpg}
+\caption{out.pgm}
+\label{test9}
+\end{figure}
+
+\end{enumerate}
 
 
 
