@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_ITERATIONS 255
+#define MAX_ITERATIONS 256
 #define WIDTH 4
 #define HEIGHT 4
 #define RESOLUTION_X 640
@@ -84,7 +84,7 @@ int print_fractal(char* output_file) {
 	}
 
 	fprintf(output, "P2\n%d\n%d\n%d\n", resolutionX, resolutionY,
-	MAX_ITERATIONS);
+	MAX_ITERATIONS-1);
 	double deltaX = width / resolutionX;
 	double maxReal = centerReal + width / 2;
 	double maxImaginary = centerImaginary + height / 2;
