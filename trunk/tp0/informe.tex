@@ -257,18 +257,22 @@ Da como resultado la siguiente salida
 255
 255 \end{verbatim}
 \end{framed}
-En este caso, el pixel es 255 (blanco)ma ya que pertenece al centro del conjunto que es completamente blanco.
+En este caso, el pixel es 255 (blanco) ya que pertenece al centro del conjunto que es completamente blanco.
 
-
-%\$ ./tp --help
-%Usage: tp 	[option_1 opt_arg1 option_2 opt_arg2 ...]
-%		[-o|--output] <output_file>
-%		[-r|--resolution] <pixel_width>x<pixel_height>
-%		[-c|--center] <real_center>[+|-]<imaginary_center>i
-%		[-w|--width] <width>
-%		[-H|--height] <height>
-%		[-h|--help]
-
+\item Ejecucion con ayuda
+\begin{framed}
+\begin{verbatim}$./tp -h -r 1x1 -w 0.0001 -H 0.0001 -o -\end{verbatim}
+\end{framed}
+Da como resultado la siguiente salida
+\begin{framed}
+\begin{verbatim}Usage: tp 	[option_1 opt_arg1 option_2 opt_arg2 ...]
+		[-o|--output] <output_file>
+		[-r|--resolution] <pixel_width>x<pixel_height>
+		[-c|--center] <real_center>[+|-]<imaginary_center>i
+		[-w|--width] <width>
+		[-H|--height] <height>
+		[-h|--help]\end{verbatim}
+\end{framed}
 
 \end{enumerate}
 
