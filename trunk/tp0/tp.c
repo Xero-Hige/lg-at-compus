@@ -169,6 +169,16 @@ bool parse_dimensions(char* str_dimensions, int* width, int* height) {
 	return true;
 }
 
+void print_help(){
+	printf("Usage: tp \t[option_1 opt_arg1 option_2 opt_arg2 ...]\n");
+	printf("\t\t[-o|--output] <output_file>\n");
+	printf("\t\t[-r|--resolution] <pixel_width>x<pixel_height>\n");
+	printf("\t\t[-c|--center] <real_center>[+|-]<imaginary_center>i\n");
+	printf("\t\t[-w|--width] <width>\n");
+	printf("\t\t[-H|--height] <height>\n");
+	printf("\t\t[-h|--help]\n");
+}
+
 int main(int argc, char **argv) {
 	int c;
 	char** end_ptr = NULL;
@@ -184,7 +194,7 @@ int main(int argc, char **argv) {
 		required_argument, 0, 'o' }, { "help",
 		no_argument, 0, 'h' }, { 0, 0, 0, 0 } };
 		int option_index = 0;
-		c = getopt_long(argc, argv, "r:c:w:H:o:h:", long_options,
+		c = getopt_long(argc, argv, "r:c:w:H:o:h", long_options,
 				&option_index);
 		/* Detect the end of the options. */
 		if (c == -1)
@@ -223,8 +233,8 @@ int main(int argc, char **argv) {
 			break;
 
 		case 'h':
-			printf("option -h\n");
-			break;
+			print_help();
+			return 0;
 
 		case '?':
 			break;
@@ -232,6 +242,11 @@ int main(int argc, char **argv) {
 		default:
 			break;
 		}
+	}
+
+	if (width <= 0 || height <= 0) //imagen imposible
+	{
+		printf("fatal: invalid resolution\n");
 	}
 
 	return print_fractal(output_file);
