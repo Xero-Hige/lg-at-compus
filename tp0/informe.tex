@@ -230,9 +230,7 @@ Genera por defecto el archivo \texttt{out.pgm} con el fractal de mandelbrot cent
 \label{test9}
 \end{figure}
 
-\end{enumerate}
-
-\item Ejecucion por consola
+\item Ejecucion por consola 1
 \begin{framed}
 \begin{verbatim}$./tp -r 1x1 -o -\end{verbatim}
 \end{framed}
@@ -244,13 +242,33 @@ Da como resultado la siguiente salida
 255
 0\end{verbatim}
 \end{framed}
+Notar que el pixel es 0 (negro) ya que la mayoria de la zona barrida en las dimensiones por defecto son de ese color.
 
-\begin{figure}[hbt]
-\centering
-\includegraphics[width=0.25\textwidth]{out9.jpg}
-\caption{out.pgm}
-\label{test9}
-\end{figure}
+
+\item Ejecucion por consola 2
+\begin{framed}
+\begin{verbatim}$./tp -r 1x1 -w 0.0001 -H 0.0001 -o -\end{verbatim}
+\end{framed}
+Da como resultado la siguiente salida
+\begin{framed}
+\begin{verbatim}P2
+1
+1
+255
+255 \end{verbatim}
+\end{framed}
+En este caso, el pixel es 255 (blanco) ya que pertenece al centro del conjunto que es completamente blanco.
+
+
+%\$ ./tp --help
+%Usage: tp 	[option_1 opt_arg1 option_2 opt_arg2 ...]
+%		[-o|--output] <output_file>
+%		[-r|--resolution] <pixel_width>x<pixel_height>
+%		[-c|--center] <real_center>[+|-]<imaginary_center>i
+%		[-w|--width] <width>
+%		[-H|--height] <height>
+%		[-h|--help]
+
 
 \end{enumerate}
 
