@@ -54,11 +54,9 @@
 
 % Información sobre los autores.
 \author{Gallipi Leandro, \textit{Padrón Nro. 00000}                    \\
-            \texttt{ dirección de e-mail }                                              			\\
+            \texttt{  leandrogallippi@gmail.com }                                              			\\
             Martinez Gaston Alberto, \textit{Padrón Nro. 91383}                     	\\
-            \texttt{gaston.martinez.90@gmail.com}                                            			\\
-            Nombre y Apellido de Autor, \textit{Padrón Nro. 00000}                     	\\
-            \texttt{ dirección de e-mail }                                              			\\[2.5ex]
+            \texttt{gaston.martinez.90@gmail.com}                                          			\\[2.5ex]
             \normalsize{Grupo Nro. ? - 2do. Cuatrimestre de 2014}                       	\\
             \normalsize{66.20 Organización de Computadoras - Práctica Martes}  	\\
             \normalsize{Facultad de Ingeniería, Universidad de Buenos Aires}     	\\
@@ -75,19 +73,62 @@
 
 % Resumen
 \begin{abstract}
-El presente trabajo busca, mediante la implementando un programa que genera fractales, familiarizarse con las herramientas de software que usaremos en los siguientes trabajos.\\
-Para ello, se desarrollara en C y se vera su portabilidad entre sistemas con una arquitectura i386 / Amd64 y una arquitectura MIPS32
+El presente trabajo trata sobre el desarrollo de un programa en lenguaje C y para poder poner a prueba su portabilidad entre sistemas con una arquitectura i386 / Amd64 y una arquitectura MIPS32
 \end{abstract}
  
 \newpage
 
 \section{Introducción}
 
+El objetivo del trabajo practico es familiarizarse con el lenguaje de programacion y las herramientas a utilizar durante la cursada. Para lograr esto, se realiza un programa que genere el fractal del conjunto del Mandelbrot \footnote{http://es.wikipedia.org/wiki/Conjunto\_de\_Mandelbrot}.\\
+
+
 \section{Desarrollo}
+
+\subsection{Salida: Formato PGM}
+
+La salida del programa se da mediante un formato conocido como \textit{Portable GrayMap} o  \textit{"PGM"}. El mismo admite dos versiones, binaria y ascii. Se opto por la salida ascii para el guardado de archivos, ya que de esta
+forma, no habria que modificar nada mas que el archivo de salida si se decide mostrar el resultado por STDOUT.\\
+Asi mismo, el formato \textit{PGM} concede varias libertades: siempre que se respete el siguiente orden, la salida ascii podra estar organizada en una o mas lineas:
+
+\[ <tipo> <ancho> <alto> <intensidad> (0,0) (1,0) ... (X,0) (0,1) ... (Y,X)  \] 
+
+En nuestro caso, optamos por el siguiente estandar:
+
+\begin{framed}
+\begin{verbatim}<tipo>
+<ancho>
+<alto>
+<intensidad>
+[(0,0),(1,0),...,(X,0)]
+[(0,1),(1,1),...,(X,1)]
+...
+[(0,Y),(1,Y),...,(X,Y)]\end{verbatim}
+\end{framed}
+
+
+Ejemplo:
+\begin{framed}
+\begin{verbatim}P2
+4
+2
+6
+0 1 5 3
+2 6 6 4\end{verbatim}
+\end{framed}
+
+Da como resultado la Figura \ref{ej} de la pagina \pageref{ej}\footnote{La imagen fue convertida a jpg por lo que la compresion del formato hace que algunos pixeles modifiquen levemente su intensidad}:
+
+\begin{figure}[hbt]
+\centering
+\includegraphics[width=0.25\textwidth]{asd.jpg}
+\caption{ejemplo.pgm}
+\label{ej}
+\end{figure}
 
 \section{Compilacion}
 
-El presente trabajo incluye un script de \textit{Makefile} para realizar la compilacion de manera automatica. Suponiendo que se este en un sistema Linux con la herramienta \textit{make} instalada \footnote{La misma esta presente en la mayoria de los sistemas Linux, pero pude que requiera ser instalada manualmente} para compilar el trabajo solo es necesario ejecutar:
+El presente trabajo incluye un script de \textit{Makefile} (Apendice B) para realizar la compilacion de manera automatica. Suponiendo que se este en un sistema Linux con la herramienta \textit{make} instalada \footnote{La misma esta presente en la mayoria de los sistemas Linux, pero pude que requiera ser instalada manualmente} para compilar el trabajo solo es necesario ejecutar:
 
 \begin{framed}
 \begin{verbatim}    $ make\end{verbatim}
@@ -304,10 +345,10 @@ Da como resultado la siguiente salida
 
 \newpage
 % Citas bibliográficas.
-\begin{thebibliography}{99} %Hasta 99 
+%\begin{thebibliography}{99} %Hasta 99 
 
-\bibitem{?}
+%\bibitem{?}
 
-\end{thebibliography}
+%\end{thebibliography}
 
 \end{document}
