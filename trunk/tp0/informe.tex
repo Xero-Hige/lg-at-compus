@@ -53,7 +53,7 @@
 \title{\textbf{TP0}\\ Generador de fractales de Mandelbrot}
 
 % Información sobre los autores.
-\author{Gallipi Leandro, \textit{Padrón Nro. 00000}                    \\
+\author{Gallipi Leandro, \textit{Padrón Nro. 94274}                    \\
             \texttt{  leandrogallippi@gmail.com }                                              			\\
             Martinez Gaston Alberto, \textit{Padrón Nro. 91383}                     	\\
             \texttt{gaston.martinez.90@gmail.com}                                          			\\[2.5ex]
@@ -84,6 +84,13 @@ El objetivo del trabajo practico es familiarizarse con el lenguaje de programaci
 
 
 \section{Desarrollo}
+
+\subsection{Diseño del algoritmo}
+
+La lógica e implementación del algoritmo ha seguido los pasos acorde a lo pedido en el enunciado del trabajo práctico. \\
+Un detalle a destacar es que consideramos una ventaja el hecho de hacer la transformación pixel a complejo previo al algoritmo ya que, con ésto, nos ahorramos una buena cantidad de cuentas en cada iteración de pixel. Es decir, una vez obtenida la relación pixel - complejo, recién ahí procedemos con el algoritmo.\\
+El algoritmo parte desde el pixel $(0,0)$ que en complejos equivale a $(\dfrac{centro\_real - ancho}{2},\dfrac{centro\_imaginario - alto}{2})$. Cada división en el eje real será $\Delta_X = \dfrac{ancho}{resolución_X}$
+y $\Delta_Y = \dfrac{alto}{resolución_Y}$. Siendo $resolución_X = 640$ y $resolución_Y = 480$ para una resolución dada de $640x480$ (por ejemplo).
 
 \subsection{Salida: Formato PGM}
 
@@ -317,6 +324,9 @@ Da como resultado la siguiente salida
 
 \end{enumerate}
 
+\section{Conclusiones}
+
+Con el trabajo practico se pudo poner en practica nuevamente el desarrollo de programas en C. Ademas comprobamos la portabilidad del codigo C entre diferentes arquitecturas.
 
 
 
