@@ -83,14 +83,21 @@ int print_fractal(char* output_file) {
 		return 3;
 	}
 
-	fprintf(output, "P2\n%d\n%d\n%d\n", resolutionX, resolutionY,
-	MAX_ITERATIONS-1);
-	double deltaX = width / resolutionX;
+	int write_bytes = fprintf(output, "P2\n%d\n%d\n%d\n", resolutionX, resolutionY,
+			MAX_ITERATIONS-1);
+
+	if (write_bytes == 0){
+		fclose(output);
+		fprintf(stderr, "fatal: error while writing in file.\n", );
+		return 4;
+	}
+
+	double deltaX = width / (resolutionX+1);
 	double maxReal = centerReal + width / 2;
 	double maxImaginary = centerImaginary + height / 2;
-	double deltaY = height / resolutionY;
+	double deltaY = height / (resolutionY+1);
 	int count_y = 0; //Cuenta iteraciones en y para que no superen el alto
-	for (double y = centerImaginary - height / 2; y < maxImaginary; y +=
+	for (double y = (centerImaginary - height / 2) + deltaY; y < maxImaginary; y +=
 			deltaY) {
 
 		if (count_y >= resolutionY)
@@ -98,14 +105,28 @@ int print_fractal(char* output_file) {
 
 		int count_x = 0; //Cuenta iteraciones en x para que no superen el ancho
 
-		for (double x = centerReal - width / 2; x < maxReal; x += deltaX) {
+		for (double x = (centerReal - width / 2) + deltaY; x < maxReal; x += deltaX) {
 			if (count_x >= resolutionX)
 				break;
-			fprintf(output, "%d ", getBrightness(x, y));
+			write_bytes = fprintf(output, "%d ", getBrightness(x, y));
+
+			if (write_bytes == 0){
+				fclose(output);
+				fprintf(stderr, "fatal: error while writing in file.\n", );
+				return 4;
+			}
+
 			count_x++;
 		}
 
-		fprintf(output, "\n");
+		write_bytes = fprintf(output, "\n");
+		
+		if (write_bytes == 0){
+			fclose(output);
+			fprintf(stderr, "fatal: error while writing in file.\n", );
+			return 4;
+		}
+		
 		count_y++;
 	}
 	fclose(output);
