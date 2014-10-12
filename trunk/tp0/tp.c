@@ -48,13 +48,11 @@ double getNewIterationY(double pixelX, double pixelY, double initialPixelY) {
  * Devuelve el brillo de un pixel que se recibe por parámetro.
  */
 int getBrightness(double x, double y) {
-	//printf("PIXEL X: %f - PIXEL Y: %f\n", x, y);
 	double varComplexPixelX = x;
 	double varComplexPixelY = y;
 	double previousComplexPixelX, previousComplexPixelY;
 	int brightness;
 	double limitation = 2;
-	//printf("COMPLEX_X: %f + COMPLEX_Y: %f\n", varComplexPixelX, varComplexPixelY);
 	for (brightness = 0; brightness < MAX_ITERATIONS - 1; brightness++) {
 		if (getAbsolute(varComplexPixelX, varComplexPixelY) > limitation) {
 			break;
@@ -178,12 +176,10 @@ bool parse_dimensions(char* str_dimensions, int* width, int* height) {
 
 	*height = strtol(str_dimensions, &end_ptr, 10);
 	if (*end_ptr != 0) {
-		printf("DEBUG: El segundo parametro de r no es un numero \n");
 		return false;
 	}
 
 	if (*width <= 0 || *height <= 0) {
-		printf("DEBUG: El parametro de r no es valido\n");
 		return false;
 	}
 
@@ -208,7 +204,6 @@ int main(int argc, char **argv) {
 
 	while (true) {
 		static struct option long_options[] = {
-		/* These options set a flag. */
 		{ "resolution", required_argument, 0, 'r' }, { "center",
 		required_argument, 0, 'c' }, { "width", required_argument, 0, 'w' }, {
 				"height", required_argument, 0, 'H' }, { "output",
@@ -217,7 +212,6 @@ int main(int argc, char **argv) {
 		int option_index = 0;
 		c = getopt_long(argc, argv, "r:c:w:H:o:h", long_options,
 				&option_index);
-		/* Detect the end of the options. */
 		if (c == -1)
 			break;
 
