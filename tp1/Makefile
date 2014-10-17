@@ -3,7 +3,7 @@ SYSTYPE	= LINUX3
 SYSLIBS	= 
 CC	= gcc $(WARN) 
 OPT	= -O
-DEBUG	= -g
+DEBUG	= -g -s
 EXPORT	= AUXLIBS='' CCARGS='' OPT='-O' DEBUG='-g'
 WARN	= -Wall
 SHELL	= /bin/sh
