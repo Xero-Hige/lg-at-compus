@@ -19,12 +19,29 @@ mips32_plot:
 	# Guardo los argumentos
 	sw		a0		,40(fp)
 	sw		a1		,36(fp)
-	sw		a2		,32(fp)
-	sw		a3		,28(fp)
+	#sw		a2		,32(fp) #TODO: VER ESTO QUE ESTA MAL, PISA EL RA
+	#sw		a3		,28(fp) #TODO: VER ESTO QUE ESTA MAL, PISA EL FP
 
 # Lectura de los parametros desde la estuctura parametro
 parse_args:
 	#TODO: Suponer que pasado este punto se tienen todos los parametros parseados y los necesarios en LTA
+	
+	#TODO: Checkear
+	lW		a0		,40(fp)
+	la		a1		,FP
+	call offsetof
+	addu	t0		,v0		,a0		#Sumo el offset al puntero
+	lw		t0		,0(t0)
+	sw		t0		,24(fp) #TODO: VER, guardo el file pointer (descriptor) en la LTA
+
+	lW		a0		,40(fp)
+	la		a1		,SHADES
+	call offsetof
+	addu	t0		,v0		,a0		#Sumo el offset al puntero
+	lw		t0		,0(t0)
+	sw		v0		,20(fp) #TODO: VER, guardo el contenido de shades
+
+
 
 # Escritura del header del PGM
 write_header:
@@ -59,3 +76,16 @@ write_error:
 .end mips32_plot
 
 .data
+
+FP:		.asciiz	"fp"
+X_RES:	.asciiz	"x_res"
+Y_RES:	.asciiz	"y_res"
+SHADES:	.asciiz	"shades
+
+UL_RE:	.asciiz	"UL_re"
+UL_IM:	.asciiz	"UL_im"
+LR_RE:	.asciiz	"LR_re"
+LR_IM:	.asciiz	"LR_im"
+D_RE:	.asciiz	"d_re"
+D_IM:	.asciiz	"d_im"
+
