@@ -29,23 +29,29 @@ parse_args:
 	#TODO: Checkear
 	lW		a0		, 4(sp)
 	la		a1		,FP
-	#call offsetof
-#	addu	t0		,v0		,a0		#Sumo el offset al puntero
-#	lw		t0		,0(t0)
-#	sw		t0		,24(sp) #TODO: VER, guardo el file pointer (descriptor) en la LTA
+	#jal offsetof
+	addiu	t0		,a0		,36		#Sumo el offset al puntero
+	lw		t0		, 0(t0)
+	sw		t0		,20(sp) #TODO: VER, guardo el file pointer (descriptor) en la LTA
 
 	lW		a0		, 4(sp)
 	la		a1		,SHADES
-	#call offsetof
-#	addu	t0		,v0		,a0		#Sumo el offset al puntero
-#	lw		t0		,0(t0)
-#	sw		v0		,20(sp) #TODO: VER, guardo el contenido de shades
+	#jal offsetof
+	addiu	t0		,a0		,32		#Sumo el offset al puntero
+	lw		t0		,0(t0)
+	sw		v0		,24(sp) #TODO: VER, guardo el contenido de shades
 
 
 
 # Escritura del header del PGM
 write_header:
+	#lw		a0		,20(sp)
+	addiu	a0		,zero	,1 #stdout
+	addiu	a1		,sp		,24
+	addiu	a2		,zero	,4
+	li		v0		,15
 
+	syscall
 # Ciclo para recorrer todos los puntos
 plot_loop:
 
