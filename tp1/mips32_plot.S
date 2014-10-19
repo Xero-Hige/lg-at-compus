@@ -24,37 +24,37 @@ mips32_plot:
 	# De aquí en más de usa $fp en lugar de sp
 	move	$fp		,sp
 	# Guardo los argumentos
-	sw		a0		, 4(sp)
-	sw		a1		, 8(sp)
-	sw		a2		, 12(sp)
-	sw		a3		, 16(sp)
+	sw		a0		, 4($fp)
+	sw		a1		, 8($fp)
+	sw		a2		, 12($fp)
+	sw		a3		, 16($fp)
 
 # Lectura de los parametros desde la estuctura parametro
 parse_args:
 	#TODO: Suponer que pasado este punto se tienen todos los parametros parseados y los necesarios en LTA
 	
 	#TODO: Checkear
-	lW		a0		, 4(sp)
+	lW		a0		, 4($fp)
 	la		a1		,FP
 	#jal offsetof
 	addiu	t0		,a0		,36		#Sumo el offset al puntero
 	lw		t0		, 0(t0)
-	sw		t0		,20(sp) #TODO: VER, guardo el file pointer (descriptor) en la LTA
+	sw		t0		,20($fp) #TODO: VER, guardo el file pointer (descriptor) en la LTA
 
-	lW		a0		, 4(sp)
+	lW		a0		, 4($fp)
 	la		a1		,SHADES
 	#jal offsetof
 	addiu	t0		,a0		,32		#Sumo el offset al puntero
 	lw		t0		,0(t0)
-	sw		v0		,24(sp) #TODO: VER, guardo el contenido de shades
+	sw		v0		,24($fp) #TODO: VER, guardo el contenido de shades
 
 
 
 # Escritura del header del PGM
 write_header:
-	#lw		a0		,20(sp)
+	#lw		a0		,20($fp)
 	addiu	a0		,zero	,1 #stdout
-	addiu	a1		,sp		,24
+	addiu	a1		,$fp	,24
 	addiu	a2		,zero	,4
 	li		v0		,15
 
@@ -68,8 +68,8 @@ shining_loop:
 # Fin de la ejecucion de la funcion
 end:
 	# Recupero ra y fp del stack
-	lw		ra		,32(sp)
-	lw		$fp		,28(sp)
+	lw		ra		,32($fp)
+	lw		$fp		,28($fp)
 	# Recupero los argumentos originales del stack
 	lw		a0		, 4(sp)
 	lw		a1		, 8(sp)
