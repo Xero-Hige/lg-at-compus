@@ -9,6 +9,9 @@
 # void mips32_plot(param_t *parms)
 mips32_plot:
 	.frame	$fp		,40		,ra #TODO: Probablemente se requiera mas para guardar los floating point regs
+	.set noreorder
+	.cpload t9
+	.set reorder
 	subu	sp		,sp		,40
 	.cprestore		24 
 	# Guardo el ra y el fp
