@@ -9,21 +9,25 @@
 # void mips32_plot(param_t *parms)
 mips32_plot:
 	.frame	$fp		,40		,ra #TODO: Probablemente se requiera mas para guardar los floating point regs
+	#Bloque para código PIC
 	.set noreorder
 	.cpload t9
 	.set reorder
+	#Creación de stack frame
 	subu	sp		,sp		,40
+	#Directiva para código PIC
 	.cprestore		24 
 	# Guardo el ra y el fp
-	sw		ra		,32(sp)
-	sw		$fp		,28(sp)
+	sw		ra		, 32(sp)
+	sw		$fp		, 28(sp)
 	# Actualizo frame pointer con el stack pointer actual
+	# De aquí en más de usa $fp en lugar de sp
 	move	$fp		,sp
 	# Guardo los argumentos
 	sw		a0		, 4(sp)
 	sw		a1		, 8(sp)
-	sw		a2		,12(sp)
-	sw		a3		,16(sp)
+	sw		a2		, 12(sp)
+	sw		a3		, 16(sp)
 
 # Lectura de los parametros desde la estuctura parametro
 parse_args:
