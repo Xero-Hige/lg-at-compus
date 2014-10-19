@@ -17,8 +17,8 @@ mips32_plot:
 	# Actualizo frame pointer con el stack pointer actual
 	move	$fp		,sp
 	# Guardo los argumentos
-	sw		a0		,40(fp)
-	sw		a1		,36(fp)
+	sw		a0		,40(sp)
+	sw		a1		,36(sp)
 	#sw		a2		,32(fp) #TODO: VER ESTO QUE ESTA MAL, PISA EL RA
 	#sw		a3		,28(fp) #TODO: VER ESTO QUE ESTA MAL, PISA EL FP
 
@@ -27,19 +27,19 @@ parse_args:
 	#TODO: Suponer que pasado este punto se tienen todos los parametros parseados y los necesarios en LTA
 	
 	#TODO: Checkear
-	lW		a0		,40(fp)
+	lW		a0		,40($fp)
 	la		a1		,FP
 	call offsetof
 	addu	t0		,v0		,a0		#Sumo el offset al puntero
 	lw		t0		,0(t0)
-	sw		t0		,24(fp) #TODO: VER, guardo el file pointer (descriptor) en la LTA
+	sw		t0		,24(sp) #TODO: VER, guardo el file pointer (descriptor) en la LTA
 
-	lW		a0		,40(fp)
+	lW		a0		,40(sp)
 	la		a1		,SHADES
 	call offsetof
 	addu	t0		,v0		,a0		#Sumo el offset al puntero
 	lw		t0		,0(t0)
-	sw		v0		,20(fp) #TODO: VER, guardo el contenido de shades
+	sw		v0		,20(sp) #TODO: VER, guardo el contenido de shades
 
 
 
@@ -58,10 +58,10 @@ end:
 	lw		ra		,32(sp)
 	lw		$fp		,28(sp)
 	# Recupero los argumentos originales del stack
-	lw		a0		,40(fp)
-	lw		a1		,36(fp)
-	lw		a2		,32(fp)
-	lw		a3		,28(fp)
+	lw		a0		,40(sp)
+	lw		a1		,36(sp)
+	lw		a2		,32(sp)
+	lw		a3		,28(sp)
 	# "Destruyo" el area de stack
 	addu	sp		,sp		,40
 
