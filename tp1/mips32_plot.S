@@ -45,9 +45,8 @@ parse_args:
 	la		a1		,SHADES
 	#jal offsetof
 	addiu	t0		,a0		,32		#Sumo el offset al puntero
-	lw		t0		,0(t0)
-	
-	#sw		v0		,24(sp) #TODO: VER, guardo el contenido de shades
+	lw		t0		, 0(t0)
+	sw		v0		,24($fp) #TODO: VER, guardo el contenido de shades
 
 
 
