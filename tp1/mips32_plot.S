@@ -46,7 +46,8 @@ parse_args:
 	#jal offsetof
 	addiu	t0		,a0		,32		#Sumo el offset al puntero
 	lw		t0		,0(t0)
-	sw		v0		,24($fp) #TODO: VER, guardo el contenido de shades
+	
+	#sw		v0		,24(sp) #TODO: VER, guardo el contenido de shades
 
 
 
@@ -102,3 +103,11 @@ LR_IM:	.asciiz	"LR_im"
 D_RE:	.asciiz	"d_re"
 D_IM:	.asciiz	"d_im"
 
+print:      .asciiz "The value is: %d\n"
+
+
+#PRINT VALUE SNIPPET
+#	la      a0,print
+#	move    a1,t0
+#	lw      t9,%call16(printf)(gp)
+#	jalr    t9
