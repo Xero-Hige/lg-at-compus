@@ -179,7 +179,7 @@ write_error:
 FP:		.asciiz	"fp"
 X_RES:	.asciiz	"x_res"
 Y_RES:	.asciiz	"y_res"
-SHADES:	.asciiz	"shades
+SHADES:	.asciiz	"shades"
 
 UL_RE:	.asciiz	"UL_re"
 UL_IM:	.asciiz	"UL_im"
