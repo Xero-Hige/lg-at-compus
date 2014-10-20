@@ -251,7 +251,46 @@ shades:
 plot_loop:
 
 # Ciclo para calcular el brillo de un punto
+	lw 		t0		,24($fp)
+
+	#TODO: Cambiar
+	li.s 	$f28	,1.0 #zr
+	li.s 	$f30 	,1.0 #zi	
+
+
 shining_loop:
+	beq		t0		,zero 	,end_of_shining_loop
+
+	li.s  	$f0		,4.0
+	mul.s 	$f2 	,$f28	,$f28 #zr*zr
+ 	mul.s 	$f4		,$f30 	,$f30 #zi*zi
+
+	add.s 	$f6 	,$f2 	,$f4
+	c.eq.s 	$f0 	,$f6
+	bc1t	end_of_shining_loop 	
+
+	mul.s 	$f8 	,$f2 	,$f28 #zr*zr*zr
+	li.s 	$f10 	,-3.0
+	mul.s 	$f10	,$f10	,$f4  #zi*zi*-3
+	mul.s   $f10	,$f10 	,$f28 #-3*zi*zi*zr
+	add.s 	$f8		,$f10	,$f8
+	#falta add cr
+
+	mul.s 	$f12 	,$f2 	,$f30 #zr*zr*zr
+	li.s 	$f14 	,-3.0
+	mul.s 	$f14	,$f14	,$f2  #zi*zi*-3
+	mul.s   $f14	,$f14	,$f30 #-3*zi*zi*zr
+	add.s 	$f12	,$f14	,$f12
+	#falta add ci
+	
+	li.s 	$f16 	,0.0
+	add.s 	$f28	,$f16	,$f8
+	add.s 	$f30 	,$f16	,$f12
+
+	subu	t0		,t0		,1
+	b 		shining_loop
+
+end_of_shining_loop:
 
 # Imprime el brillo del pixel actual, tiene que estar guardado en la LTA
 print_shining:
@@ -280,6 +319,9 @@ print_shining:
 	li 		v0		,SYS_write
 
 	syscall
+
+end_of_plot_loop:
+
 
 # Fin de la ejecucion de la funcion
 end:
