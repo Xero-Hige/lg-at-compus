@@ -141,7 +141,7 @@ write_header:
 
 	la		a0		,PGM #Print header
 	lw		a1		,20($fp)
-	li 		a2		,2 #Copio solo 2 bytes, es para usar formato binario
+	li 		a2		,3
 	li		v0		,SYS_write
 
 	syscall
@@ -154,7 +154,23 @@ shining_loop:
 
 # Imprime el brillo del pixel actual, tiene que estar guardado en la LTA
 print_shining:
-	la 		a0		,24($fp) #TODO: estoy usando el brillo maximo
+	lw 		a0		,24($fp) #TODO: estoy usando el brillo maximo
+
+	rem		t0		,a0		,10
+	sb 		t0 		,62($fp)
+
+	div 	a0		,a0		,10
+	rem		t0		,a0		,10
+	sb 		t0 		,61($fp)
+
+	div 	a0		,a0		,10
+	rem		t0		,a0		,10
+	sb 		t0 		,60($fp)
+
+	li 		t0		,32 # Espacio
+	sb 		t0		,63($fp)
+
+	la 		a0		,60($fp)
 	lw 		a1		,20($fp)
 	li 		a2		,4 		#Se imprimen 4 bytes
 	li 		v0		,SYS_write
