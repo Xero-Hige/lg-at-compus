@@ -36,22 +36,22 @@ parse_args:
 	#FD
 	lW		a0		, 4($fp)
 	addiu	t0		,a0		,36		#Sumo el offset al puntero para obtener el FILE*
-	lh		t0		,14(t0)			#Recupero el fd de la estructura FILE. Como es un short recupero un halfword
+	lhu		t0		,14(t0)			#Recupero el fd de la estructura FILE. Como es un short recupero un halfword
 	sw		t0		,20($fp) #TODO: VER, guardo el "file pointer" (descriptor) en la LTA
 
 	la      a0,print
-	addu  	a1,zero,t0		
+	move  	a1,t0		
 	lw      t9,%call16(printf)(gp)
 	jalr    t9
 
 
 	#SHADES
-	lW		a0		, 4($fp)
+	lw		a0		, 4($fp)
 	lw		t0		,32(a0)
 	sw		t0		,24($fp) 
 
 	la      a0		,print
-	addu  	a1,zero,t0		
+	move  	a1		,t0		
 	lw      t9,%call16(printf)(gp)
 	jalr    t9
 
@@ -139,17 +139,27 @@ parse_args:
 # Escritura del header del PGM
 write_header:
 
-	lw		a0		,20($fp)
-	addiu	a1		,$fp	,24
-	addiu	a2		,zero	,4
-	li		v0		,15
+	la		a0		,PGM #Print header
+	lw		a1		,20($fp)
+	li 		a2		,2 #Copio solo 2 bytes, es para usar formato binario
+	li		v0		,SYS_write
 
 	syscall
+
 # Ciclo para recorrer todos los puntos
 plot_loop:
 
 # Ciclo para calcular el brillo de un punto
 shining_loop:
+
+# Imprime el brillo del pixel actual, tiene que estar guardado en la LTA
+print_shining:
+	la 		a0		,24($fp) #TODO: estoy usando el brillo maximo
+	lw 		a1		,20($fp)
+	li 		a2		,4 		#Se imprimen 4 bytes
+	li 		v0		,SYS_write
+
+	syscall
 
 # Fin de la ejecucion de la funcion
 end:
@@ -175,6 +185,8 @@ write_error:
 .end mips32_plot
 
 .data
+
+PGM:	.asciiz "P2\n"
 
 FP:		.asciiz	"fp"
 X_RES:	.asciiz	"x_res"
