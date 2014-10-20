@@ -39,10 +39,10 @@ parse_args:
 	lhu		t0		,14(t0)			#Recupero el fd de la estructura FILE. Como es un short recupero un halfword
 	sw		t0		,20($fp) #TODO: VER, guardo el "file pointer" (descriptor) en la LTA
 
-	la      a0,print
-	move  	a1,t0		
-	lw      t9,%call16(printf)(gp)
-	jalr    t9
+	#la      a0,print
+	#move  	a1,t0		
+	#lw      t9,%call16(printf)(gp)
+	#jalr    t9
 
 
 	#SHADES
@@ -50,90 +50,90 @@ parse_args:
 	lw		t0		,32(a0)
 	sw		t0		,24($fp) 
 
-	la      a0		,print
-	move  	a1		,t0		
-	lw      t9,%call16(printf)(gp)
-	jalr    t9
+	#la      a0		,print
+	#move  	a1		,t0		
+	#lw      t9,%call16(printf)(gp)
+	#jalr    t9
 
 	#Y_RES
 	lW		a0		, 4($fp)
 	lw		t0		,28(a0)
 	sw		t0		,28($fp) 
 
-	la      a0		,print
-	addu  	a1,zero,t0		
-	lw      t9,%call16(printf)(gp)
-	jalr    t9
+	#la      a0		,print
+	#addu  	a1,zero,t0		
+	#lw      t9,%call16(printf)(gp)
+	#jalr    t9
 
 	#X_RES
 	lW		a0		, 4($fp)
 	lw		t0		,24(a0)
 	sw		t0		,32($fp) 
 
-	la      a0,print
-	addu  	a1,zero,t0		
-	lw      t9,%call16(printf)(gp)
-	jalr    t9
+	#la      a0,print
+	#addu  	a1,zero,t0		
+	#lw      t9,%call16(printf)(gp)
+	#jalr    t9
 
 	#D_IM
 	lW		a0		, 4($fp)
 	lw		t0		,20(a0)
 	sw		t0		,36($fp) 
 
-	la      a0,print_f
-	addu  	a1,zero,t0		
-	lw      t9,%call16(printf)(gp)
-	jalr    t9
+	#la      a0,print_f
+	#addu  	a1,zero,t0		
+	#lw      t9,%call16(printf)(gp)
+	#jalr    t9
 
 	#D_RE
 	lW		a0		, 4($fp)
 	lw		t0		,16(a0)
 	sw		t0		,40($fp) 
 
-	la      a0,print_f
-	lw    	a1		,0(t0)		
-	lw      t9,%call16(printf)(gp)
-	jalr    t9
+	#la      a0,print_f
+	#lw    	a1		,0(t0)		
+	#lw      t9,%call16(printf)(gp)
+	#jalr    t9
 
 	#LR_IM
 	lW		a0		, 4($fp)
 	lw		t0		,12(a0)
 	sw		t0		,44($fp) 
 
-	la      a0,print_f
-	addu  	a1,zero,t0		
-	lw      t9,%call16(printf)(gp)
-	jalr    t9
+	#la      a0,print_f
+	#addu  	a1,zero,t0		
+	#lw      t9,%call16(printf)(gp)
+	#jalr    t9
 
 	#LR_RE
 	lW		a0		, 4($fp)
 	lw		t0		, 8(a0)
 	sw		t0		,48($fp) 
 
-	la      a0,print_f
-	addu  	a1,zero,t0		
-	lw      t9,%call16(printf)(gp)
-	jalr    t9
+	#la      a0,print_f
+	#addu  	a1,zero,t0		
+	#lw      t9,%call16(printf)(gp)
+	#jalr    t9
 
 	#UL_IM
 	lW		a0		, 4($fp)
 	lw		t0		, 4(a0)
 	sw		t0		,52($fp) 
 
-	la      a0,print_f
-	addu  	a1,zero,t0		
-	lw      t9,%call16(printf)(gp)
-	jalr    t9
+	#la      a0,print_f
+	#addu  	a1,zero,t0		
+	#lw      t9,%call16(printf)(gp)
+	#jalr    t9
 
 	#UL_RE
 	lW		a0		, 4($fp)
 	lw		t0		, 0(a0)
 	sw		t0		,56($fp) 
 
-	la      a0,print_f
-	addu  	a1,zero,t0		
-	lw      t9,%call16(printf)(gp)
-	jalr    t9
+	#la      a0,print_f
+	#addu  	a1,zero,t0		
+	#lw      t9,%call16(printf)(gp)
+	#jalr    t9
 
 
 # Escritura del header del PGM
@@ -346,6 +346,34 @@ write_error:
 
 .end mips32_plot
 
+.ent mystrlen
+mystrlen:
+	.frame $fp, 16, ra
+	.set noreorder
+	.cpload t9
+	.set reorder
+	subu sp, sp, 16
+	.cprestore 0
+	sw $fp, 4(sp)
+	move $fp, sp
+
+	#USO V0 para el resultado de mystrlen
+	li v0, 0
+mystrlen_loop:
+	lb t0, 0(a0)
+	beqz t0, mystrlen_return
+	addiu a0, a0, 1
+	addiu v0, v0, 1
+	j mystrlen_loop
+mystrlen_return:
+	#Destruimos el frame
+	lw $fp, 4(sp)
+	addu sp, sp, 16
+	#retorno
+	j ra
+	.end mystrlen
+
+
 .data
 
 PGM:	.asciiz "P2\n"
@@ -367,6 +395,20 @@ D_IM:	.asciiz	"d_im"
 print:      .asciiz "The value is: %d\n"
 print_f:      .asciiz "The value is: %f\n"
 
+numbers: 
+		.word number_0, number_1, number_2, number_3, number_4, number_5, number_6, number_7, number_8, number_9
+		.size number, 40
+
+number_0: .asciiz "0"
+number_1: .asciiz "1"
+number_2: .asciiz "2"
+number_3: .asciiz "3"
+number_4: .asciiz "4"
+number_5: .asciiz "5"
+number_6: .asciiz "6"
+number_7: .asciiz "7"
+number_8: .asciiz "8"
+number_9: .asciiz "9"
 
 #PRINT VALUE SNIPPET
 #	la      a0,print
