@@ -34,7 +34,7 @@ parse_args:
 	#TODO: Suponer que pasado este punto se tienen todos los parametros parseados y los necesarios en LTA
 	
 	#FD
-	lW		a0		, 4($fp)
+	lw		a0		, 4($fp)
 	addiu	t0		,a0		,36		#Sumo el offset al puntero para obtener el FILE*
 	lhu		t0		,14(t0)			#Recupero el fd de la estructura FILE. Como es un short recupero un halfword
 	sw		t0		,20($fp) #TODO: VER, guardo el "file pointer" (descriptor) en la LTA
@@ -146,6 +146,107 @@ write_header:
 
 	syscall
 
+	#X resolution
+
+	lw 		a0		,32($fp)
+
+	rem		t0		,a0		,10
+	addiu	t0		,t0		,48
+	sb 		t0 		,63($fp)
+
+	div 	a0		,a0		,10
+	rem		t0		,a0		,10
+	addiu	t0		,t0		,48
+	sb 		t0 		,62($fp)
+
+	div 	a0		,a0		,10
+	rem		t0		,a0		,10
+	addiu	t0		,t0		,48
+	sb 		t0 		,61($fp)
+
+	div 	a0		,a0		,10
+	rem		t0		,a0		,10
+	addiu	t0		,t0		,48
+	sb 		t0 		,60($fp)
+
+	la 		a0		,60($fp)
+	lw 		a1		,20($fp)
+	li 		a2		,4 		#Se imprimen 4 bytes
+	li 		v0		,SYS_write
+
+	syscall
+
+	la 		a0		,ENDL
+	lw 		a1		,20($fp)
+	li 		a2		,1		#Se imprime el \n
+	li 		v0		,SYS_write
+
+	syscall
+	 		
+	#Y resolution
+
+	lw 		a0		,28($fp)
+
+	rem		t0		,a0		,10
+	addiu	t0		,t0		,48
+	sb 		t0 		,63($fp)
+
+	div 	a0		,a0		,10
+	rem		t0		,a0		,10
+	addiu	t0		,t0		,48
+	sb 		t0 		,62($fp)
+
+	div 	a0		,a0		,10
+	rem		t0		,a0		,10
+	addiu	t0		,t0		,48
+	sb 		t0 		,61($fp)
+
+	div 	a0		,a0		,10
+	rem		t0		,a0		,10
+	addiu	t0		,t0		,48
+	sb 		t0 		,60($fp)
+
+	la 		a0		,60($fp)
+	lw 		a1		,20($fp)
+	li 		a2		,4 		#Se imprimen 4 bytes
+	li 		v0		,SYS_write
+
+	syscall
+
+	la 		a0		,ENDL
+	lw 		a1		,20($fp)
+	li 		a2		,1		#Se imprime el \n
+	li 		v0		,SYS_write
+
+	syscall
+
+shades:
+	lw 		a0		,24($fp)
+
+	rem		t0		,a0		,10
+	addiu	t0		,t0		,48
+	sb 		t0 		,62($fp)
+
+	div 	a0		,a0		,10
+	rem		t0		,a0		,10
+	addiu	t0		,t0		,48
+	sb 		t0 		,61($fp)
+
+	div 	a0		,a0		,10
+	rem		t0		,a0		,10
+	addiu	t0		,t0		,48
+	sb 		t0 		,60($fp)
+
+	li 		t0		,10 # \n
+	sb 		t0		,63($fp)
+
+	la 		a0		,60($fp)
+	lw 		a1		,20($fp)
+	li 		a2		,4 		#Se imprimen 4 bytes
+	li 		v0		,SYS_write
+
+	syscall
+
 # Ciclo para recorrer todos los puntos
 plot_loop:
 
@@ -157,14 +258,17 @@ print_shining:
 	lw 		a0		,24($fp) #TODO: estoy usando el brillo maximo
 
 	rem		t0		,a0		,10
+	addiu	t0		,t0		,48
 	sb 		t0 		,62($fp)
 
 	div 	a0		,a0		,10
 	rem		t0		,a0		,10
+	addiu	t0		,t0		,48
 	sb 		t0 		,61($fp)
 
 	div 	a0		,a0		,10
 	rem		t0		,a0		,10
+	addiu	t0		,t0		,48
 	sb 		t0 		,60($fp)
 
 	li 		t0		,32 # Espacio
@@ -203,6 +307,8 @@ write_error:
 .data
 
 PGM:	.asciiz "P2\n"
+ENDL:	.asciiz "\n"
+
 
 FP:		.asciiz	"fp"
 X_RES:	.asciiz	"x_res"
