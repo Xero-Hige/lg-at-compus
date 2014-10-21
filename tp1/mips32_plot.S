@@ -346,6 +346,82 @@ write_error:
 
 .end mips32_plot
 
+.ent print_numbers
+print_numbers:
+	# debugging info: descripcion del stack frame
+	.frame	$fp, 40, ra	# $fp: registro usado como frame pointer
+				# 40: tamañodel stack frame
+				# ra: registro que almacena el return address
+	# bloque para codigo PIC
+	.set	noreorder	# apaga reordenamiento de instrucciones
+	.cpload t9		# directiva usada para codigo PIC
+	.set	reorder		# enciende reordenamiento de instrucciones
+
+	# creo stack frame
+	subu	sp, sp, 40	# 4 (SRA) + 2 (LTA) + 4 (ABA)
+
+	# directiva para codigo PIC
+	.cprestore 24		# inserta aqui "sw gp, 24(sp)",
+				# mas "lw gp, 24(sp)" luego de cada jal.
+	# salvado de callee-saved regs en SRA	
+	sw	$fp, 28(sp)
+	sw	ra, 32(sp)
+
+	# de aqui al fin de la funcion uso $fp en lugar de sp.
+	move	$fp, sp
+	
+	# salvo 1er arg (siempre)
+	sw	a0, 40($fp)	# n: a0, sp+40
+
+	# r = n % 10;
+	remu	t0, a0, 10	# r: t0, sp+16	## remU
+	sw	t0, 16($fp)
+
+	# n /= 10;
+	lw	a0, 40($fp)			## redundante
+	divu	a0, a0, 10			## divU!
+	sw	a0, 40($fp)
+
+	## if (n > 0) 
+	lw	a0, 40($fp)			## redundante
+	beq	a0, zero, _write_numbers # n>0 equivale a n!=0 (n unsigned)
+	
+	#	print_numbers(n);
+	lw	a0, 40($fp)			## redundante
+	la	t9, print_numbers
+	jal	ra, t9
+
+_write_numbers:
+	# write(1, numbers[r], mystrlen(numbers[r]));
+	# calculo auxiliar: obtengo numbers[r]
+	lw	a0, 16($fp)	# r: a0, sp+16
+	sll	a0, a0, 2	# escalo r con tam de ptr (r*=4)
+	lw	a0, numbers(a0)	# numbers[r]: a0
+	sw	a0, 20($fp)	# almaceno numbers[r] en LTA
+	# obtengo mystrlen(numbers[r])
+	la	t9, mystrlen	# mystrlen(numbers[r])
+	jal	ra, t9
+	# cargo argumentos y nro de syscall
+	move	a2, v0
+	lw	a1, 20($fp)	# numbers[r] ## (por que no hago move a1, a0?)
+	li	a0, 1	
+	li	v0, SYS_write
+	syscall
+
+	# return;
+	# restauro callee-saved regs
+	lw	gp, 24(sp)
+	lw	$fp, 28(sp)
+	lw	ra, 32(sp)
+	# destruyo stack frame
+	addu	sp, sp, 40
+	# vuelvo a funcion llamante
+	jr	ra
+
+	.end	print_numbers
+	.size	print_numbers,.-print_numbers
+
+
 .ent mystrlen
 mystrlen:
 	.frame $fp, 16, ra
