@@ -216,23 +216,23 @@ shades:
 	syscall
 
 # Ciclo para recorrer todos los puntos
-plot_loop_y:
-
-	for (y = 0, ci = parms->UL_im; 
+	#for (y = 0, ci = parms->UL_im; 
 	li 		t8		,0  	#	y = 0
 	l.s 	$f26	,52($fp)#	CI
 
-
+plot_loop_y:
 	#y < parms->y_res; 
-	#++y, ci -= parms->d_im) {
-	
-plot_loop_x:
-		for (x = 0, cr = parms->UL_re; 
+	lw		t0		,28($fp)
+	beq		t0		,t8		,end_plot_loop_y
+
+	#for (x = 0, cr = parms->UL_re; 
 	li 		t9		,0 		#  x = 0
 	l.s 	$f24	,56($fp)#  CR
 
+plot_loop_x:
 	#x < parms->x_res; 
-	#++x, cr += parms->d_re) {
+	lw		t0		,30($fp)
+	beq		t0		,t9		,end_plot_loop_y
 
 
 
@@ -308,7 +308,22 @@ print_shining:
 
 	syscall
 
-end_of_plot_loop:
+	#++x, cr += parms->d_re) {
+	addiu	t9		,t9		,1 #x++
+	l.s		$f0		,40($fp)
+	add.s	$f24	,$f24	,$f0
+	b plot_x
+
+
+end_plot_x:
+	#++y, ci -= parms->d_im) {
+	addiu	t8		,t8		,1 #y++
+	l.s		$f0		,36($fp)
+	add.s	$f26	,$f26	,$f0
+	b plot_y
+
+end_plot_y:
+	
 
 
 # Fin de la ejecucion de la funcion
