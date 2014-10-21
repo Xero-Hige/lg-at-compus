@@ -231,7 +231,7 @@ plot_loop_y:
 
 plot_loop_x:
 	#x < parms->x_res; 
-	lw		t0		,34($fp)
+	lw		t0		,32($fp)
 	beq		t0		,t9		,end_plot_loop_x
 
 
