@@ -353,13 +353,16 @@ end:
 # Manejo de errores de escritura
 write_error:
 	#TODO: Imprimir el error de escritura en stderr
-	li		a0		,error
+	la		a0		,error
 	li		a1		,2
 	li		a2		,10		#Se imprimen 4 bytes
 	li		v0		,SYS_write
-
 	syscall
-	b		end
+
+	la		a0		,1
+	li		v0		,SYS_exit
+	syscall
+
 
 .end mips32_plot
 
@@ -503,7 +506,7 @@ number_7: .asciiz "7"
 number_8: .asciiz "8"
 number_9: .asciiz "9"
 
-error: "I/O Error\n"
+error: .asciiz "I/O Error\n"
 
 #PRINT VALUE SNIPPET
 #	la      a0,print
