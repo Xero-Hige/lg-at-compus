@@ -275,7 +275,8 @@ end_of_shining_loop:
 
 # Imprime el brillo del pixel actual, tiene que estar guardado en la LTA
 print_shining:
-	addi a0	,t0, -255
+	#addi a0	,t0, -255
+	move a0, t0
 
 	rem		t0		,a0		,10
 	addiu	t0		,t0		,48
