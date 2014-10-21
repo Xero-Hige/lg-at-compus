@@ -88,8 +88,8 @@ parse_args:
 # Escritura del header del PGM
 write_header:
 
-	la		a0		,PGM #Print header
-	lw		a1		,20($fp)
+	la		a1		,PGM #Print header
+	lw		a0		,20($fp)
 	li 		a2		,3
 	li		v0		,SYS_write
 
@@ -119,16 +119,16 @@ write_header:
 	addiu	t0		,t0		,48
 	sb 		t0 		,60($fp)
 
-	la 		a0		,60($fp)
-	lw 		a1		,20($fp)
+	la 		a1		,60($fp)
+	lw 		a0		,20($fp)
 	li 		a2		,4 		#Se imprimen 4 bytes
 	li 		v0		,SYS_write
 
 	syscall
 	bne		a2		,a3		,write_error
 
-	la 		a0		,ENDL
-	lw 		a1		,20($fp)
+	la 		a1		,ENDL
+	lw 		a0		,20($fp)
 	li 		a2		,1		#Se imprime el \n
 	li 		v0		,SYS_write
 
@@ -157,16 +157,16 @@ write_header:
 	addiu	t0		,t0		,48
 	sb 		t0 		,60($fp)
 
-	la 		a0		,60($fp)
-	lw 		a1		,20($fp)
+	la 		a1		,60($fp)
+	lw 		a0		,20($fp)
 	li 		a2		,4 		#Se imprimen 4 bytes
 	li 		v0		,SYS_write
 
 	syscall
 	bne		a2		,a3		,write_error
 
-	la 		a0		,ENDL
-	lw 		a1		,20($fp)
+	la 		a1		,ENDL
+	lw 		a0		,20($fp)
 	li 		a2		,1		#Se imprime el \n
 	li 		v0		,SYS_write
 
@@ -193,8 +193,8 @@ shades:
 	li 		t0		,10 # \n
 	sb 		t0		,63($fp)
 
-	la 		a0		,60($fp)
-	lw 		a1		,20($fp)
+	la 		a1		,60($fp)
+	lw 		a0		,20($fp)
 	li 		a2		,4 		#Se imprimen 4 bytes
 	li 		v0		,SYS_write
 
@@ -288,8 +288,8 @@ print_shining:
 	li 		t0		,32 # Espacio
 	sb 		t0		,63($fp)
 
-	la 		a0		,60($fp)
-	lw 		a1		,20($fp)
+	la 		a1		,60($fp)
+	lw 		a0		,20($fp)
 	li 		a2		,4 		#Se imprimen 4 bytes
 	li 		v0		,SYS_write
 
@@ -334,8 +334,8 @@ end:
 # Manejo de errores de escritura
 write_error:
 	#TODO: Imprimir el error de escritura en stderr
-	la		a0		,error
-	li		a1		,2
+	la		a1		,error
+	li		a0		,2
 	li		a2		,10		#Se imprimen 4 bytes
 	li		v0		,SYS_write
 	syscall
