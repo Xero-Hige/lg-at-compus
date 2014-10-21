@@ -216,14 +216,34 @@ shades:
 	syscall
 
 # Ciclo para recorrer todos los puntos
-plot_loop:
+plot_loop_y:
+
+	for (y = 0, ci = parms->UL_im; 
+	li 		t8		,0  	#	y = 0
+	l.s 	$f26	,52($fp)#	CI
+
+
+	#y < parms->y_res; 
+	#++y, ci -= parms->d_im) {
+	
+plot_loop_x:
+		for (x = 0, cr = parms->UL_re; 
+	li 		t9		,0 		#  x = 0
+	l.s 	$f24	,56($fp)#  CR
+
+	#x < parms->x_res; 
+	#++x, cr += parms->d_re) {
+
+
 
 # Ciclo para calcular el brillo de un punto
 	lw 		t0		,24($fp)
 
-	#TODO: Cambiar
-	li.s 	$f28	,1.0 #zr
-	li.s 	$f30 	,1.0 #zi	
+	#zr = cr;
+	#zi = ci;
+
+	mov.s 	$f28	,$f24 #zr
+	mov.s 	$f30 	,$f26 #zi	
 
 
 shining_loop:
