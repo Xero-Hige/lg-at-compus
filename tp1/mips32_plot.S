@@ -232,7 +232,7 @@ plot_loop_y:
 plot_loop_x:
 	#x < parms->x_res; 
 	lw		t0		,30($fp)
-	beq		t0		,t9		,end_plot_loop_y
+	beq		t0		,t9		,end_plot_loop_x
 
 
 
@@ -312,17 +312,17 @@ print_shining:
 	addiu	t9		,t9		,1 #x++
 	l.s		$f0		,40($fp)
 	add.s	$f24	,$f24	,$f0
-	b plot_x
+	b plot_loop_x
 
 
-end_plot_x:
+end_plot_loop_x:
 	#++y, ci -= parms->d_im) {
 	addiu	t8		,t8		,1 #y++
 	l.s		$f0		,36($fp)
 	add.s	$f26	,$f26	,$f0
-	b plot_y
+	b plot_loop_y
 
-end_plot_y:
+end_plot_loop_y:
 	
 
 
