@@ -39,101 +39,69 @@ parse_args:
 	lhu		t0		,14(t0)			#Recupero el fd de la estructura FILE. Como es un short recupero un halfword
 	sw		t0		,20($fp) #TODO: VER, guardo el "file pointer" (descriptor) en la LTA
 
-	#la      a0,print
-	#move  	a1,t0		
-	#lw      t9,%call16(printf)(gp)
-	#jalr    t9
-
+	jal print_numbers
 
 	#SHADES
 	lw		a0		, 4($fp)
 	lw		t0		,32(a0)
 	sw		t0		,24($fp) 
 
-	#la      a0		,print
-	#move  	a1		,t0		
-	#lw      t9,%call16(printf)(gp)
-	#jalr    t9
-
+	#jal print_numbers
 	#Y_RES
 	lW		a0		, 4($fp)
 	lw		t0		,28(a0)
 	sw		t0		,28($fp) 
 
-	#la      a0		,print
-	#addu  	a1,zero,t0		
-	#lw      t9,%call16(printf)(gp)
-	#jalr    t9
+	#jal print_numbers
 
 	#X_RES
 	lW		a0		, 4($fp)
 	lw		t0		,24(a0)
 	sw		t0		,32($fp) 
 
-	#la      a0,print
-	#addu  	a1,zero,t0		
-	#lw      t9,%call16(printf)(gp)
-	#jalr    t9
+	#jal print_numbers
 
 	#D_IM
 	lW		a0		, 4($fp)
 	lw		t0		,20(a0)
 	sw		t0		,36($fp) 
 
-	#la      a0,print_f
-	#addu  	a1,zero,t0		
-	#lw      t9,%call16(printf)(gp)
-	#jalr    t9
+	#jal print_numbers
 
 	#D_RE
 	lW		a0		, 4($fp)
 	lw		t0		,16(a0)
 	sw		t0		,40($fp) 
 
-	#la      a0,print_f
-	#lw    	a1		,0(t0)		
-	#lw      t9,%call16(printf)(gp)
-	#jalr    t9
+	#jal print_numbers
 
 	#LR_IM
 	lW		a0		, 4($fp)
 	lw		t0		,12(a0)
 	sw		t0		,44($fp) 
 
-	#la      a0,print_f
-	#addu  	a1,zero,t0		
-	#lw      t9,%call16(printf)(gp)
-	#jalr    t9
+	#jal print_numbers
 
 	#LR_RE
 	lW		a0		, 4($fp)
 	lw		t0		, 8(a0)
 	sw		t0		,48($fp) 
 
-	#la      a0,print_f
-	#addu  	a1,zero,t0		
-	#lw      t9,%call16(printf)(gp)
-	#jalr    t9
+	#jal print_numbers
 
 	#UL_IM
 	lW		a0		, 4($fp)
 	lw		t0		, 4(a0)
 	sw		t0		,52($fp) 
 
-	#la      a0,print_f
-	#addu  	a1,zero,t0		
-	#lw      t9,%call16(printf)(gp)
-	#jalr    t9
+	#jal print_numbers
 
 	#UL_RE
 	lW		a0		, 4($fp)
 	lw		t0		, 0(a0)
 	sw		t0		,56($fp) 
 
-	#la      a0,print_f
-	#addu  	a1,zero,t0		
-	#lw      t9,%call16(printf)(gp)
-	#jalr    t9
+	#jal print_numbers
 
 
 # Escritura del header del PGM
