@@ -94,7 +94,8 @@ write_header:
 	li		v0		,SYS_write
 
 	syscall
-	bne		a2		,a3		,write_error
+	blt     v0		,a2		, write_error
+	bne		a3		,zero		,write_error
 
 	#X resolution
 
@@ -125,7 +126,8 @@ write_header:
 	li 		v0		,SYS_write
 
 	syscall
-	bne		a2		,a3		,write_error
+	blt     v0		,a2		, write_error
+	bne		a3		,zero		,write_error
 
 	la 		a1		,ENDL
 	lw 		a0		,20($fp)
@@ -133,7 +135,8 @@ write_header:
 	li 		v0		,SYS_write
 
 	syscall
-	bne		a2		,a3		,write_error
+	blt     v0		,a2		, write_error
+	bne		a3		,zero		,write_error
 
 	#Y resolution
 	lw 		a0		,28($fp)
@@ -163,7 +166,8 @@ write_header:
 	li 		v0		,SYS_write
 
 	syscall
-	bne		a2		,a3		,write_error
+	blt     v0		,a2		, write_error
+	bne		a3		,zero		,write_error
 
 	la 		a1		,ENDL
 	lw 		a0		,20($fp)
@@ -171,7 +175,8 @@ write_header:
 	li 		v0		,SYS_write
 
 	syscall
-	bne		a2		,a3		,write_error
+	blt     v0		,a2		, write_error
+	bne		a3		,zero		,write_error
 
 shades:
 	lw 		a0		,24($fp)
@@ -199,7 +204,8 @@ shades:
 	li 		v0		,SYS_write
 
 	syscall
-	bne		a2		,a3		,write_error
+	blt     v0		,a2		, write_error
+	bne		a3		,zero		,write_error
 
 # Ciclo para recorrer todos los puntos
 	#for (y = 0, ci = parms->UL_im; 
@@ -269,7 +275,7 @@ end_of_shining_loop:
 
 # Imprime el brillo del pixel actual, tiene que estar guardado en la LTA
 print_shining:
-	lw 		a0		,24($fp) #TODO: estoy usando el brillo maximo
+	addi a0	,t0, -255
 
 	rem		t0		,a0		,10
 	addiu	t0		,t0		,48
@@ -295,7 +301,8 @@ print_shining:
 
 	syscall
 
-	bne		a2		,a3		,write_error
+	blt     v0		,a2		, write_error
+	bne		a3		,zero		,write_error
 
 	#++x, cr += parms->d_re) {
 	addiu	t9		,t9		,1 #x++
