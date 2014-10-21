@@ -36,7 +36,7 @@ parse_args:
 	#FD
 	lw		a0		, 4($fp)
 	addiu	t0		,a0		,36		#Sumo el offset al puntero para obtener el FILE*
-	lhu		t0		,14(t0)			#Recupero el fd de la estructura FILE. Como es un short recupero un halfword
+	lh		t0		,14(t0)			#Recupero el fd de la estructura FILE. Como es un short recupero un halfword
 	sw		t0		,20($fp) #TODO: VER, guardo el "file pointer" (descriptor) en la LTA
 
 	#SHADES
