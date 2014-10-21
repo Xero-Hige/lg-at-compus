@@ -113,6 +113,7 @@ write_header:
 	li		v0		,SYS_write
 
 	syscall
+	bne		a2		,a3		,write_error
 
 	#X resolution
 
@@ -143,6 +144,7 @@ write_header:
 	li 		v0		,SYS_write
 
 	syscall
+	bne		a2		,a3		,write_error
 
 	la 		a0		,ENDL
 	lw 		a1		,20($fp)
@@ -150,9 +152,9 @@ write_header:
 	li 		v0		,SYS_write
 
 	syscall
-	 		
-	#Y resolution
+	bne		a2		,a3		,write_error
 
+	#Y resolution
 	lw 		a0		,28($fp)
 
 	rem		t0		,a0		,10
@@ -180,6 +182,7 @@ write_header:
 	li 		v0		,SYS_write
 
 	syscall
+	bne		a2		,a3		,write_error
 
 	la 		a0		,ENDL
 	lw 		a1		,20($fp)
@@ -187,6 +190,7 @@ write_header:
 	li 		v0		,SYS_write
 
 	syscall
+	bne		a2		,a3		,write_error
 
 shades:
 	lw 		a0		,24($fp)
@@ -214,6 +218,7 @@ shades:
 	li 		v0		,SYS_write
 
 	syscall
+	bne		a2		,a3		,write_error
 
 # Ciclo para recorrer todos los puntos
 	#for (y = 0, ci = parms->UL_im; 
@@ -308,6 +313,8 @@ print_shining:
 	li 		v0		,SYS_write
 
 	syscall
+
+	bne		a2		,a3		,write_error
 
 	#++x, cr += parms->d_re) {
 	addiu	t9		,t9		,1 #x++
