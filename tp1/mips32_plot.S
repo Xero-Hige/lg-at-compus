@@ -39,7 +39,7 @@ parse_args:
 	lhu		t0		,14(t0)			#Recupero el fd de la estructura FILE. Como es un short recupero un halfword
 	sw		t0		,20($fp) #TODO: VER, guardo el "file pointer" (descriptor) en la LTA
 
-	jal print_numbers
+	#jal print_numbers
 
 	#SHADES
 	lw		a0		, 4($fp)
@@ -262,14 +262,15 @@ shining_loop:
 	mul.s 	$f10	,$f10	,$f4  #zi*zi*-3
 	mul.s   $f10	,$f10 	,$f28 #-3*zi*zi*zr
 	add.s 	$f8		,$f10	,$f8
-	#falta add cr
+	add.s   $f8		,$f8	,$f26 #add cr
 
 	mul.s 	$f12 	,$f2 	,$f30 #zr*zr*zr
 	li.s 	$f14 	,-3.0
 	mul.s 	$f14	,$f14	,$f2  #zi*zi*-3
 	mul.s   $f14	,$f14	,$f30 #-3*zi*zi*zr
 	add.s 	$f12	,$f14	,$f12
-	#falta add ci
+	add.s   $f12	,$f12	,$f24 #add ci
+
 	
 	li.s 	$f16 	,0.0
 	add.s 	$f28	,$f16	,$f8
