@@ -39,69 +39,50 @@ parse_args:
 	lhu		t0		,14(t0)			#Recupero el fd de la estructura FILE. Como es un short recupero un halfword
 	sw		t0		,20($fp) #TODO: VER, guardo el "file pointer" (descriptor) en la LTA
 
-	#jal print_numbers
-
 	#SHADES
 	lw		a0		, 4($fp)
 	lw		t0		,32(a0)
 	sw		t0		,24($fp) 
 
-	#jal print_numbers
 	#Y_RES
 	lW		a0		, 4($fp)
 	lw		t0		,28(a0)
 	sw		t0		,28($fp) 
-
-	#jal print_numbers
 
 	#X_RES
 	lW		a0		, 4($fp)
 	lw		t0		,24(a0)
 	sw		t0		,32($fp) 
 
-	#jal print_numbers
-
 	#D_IM
 	lW		a0		, 4($fp)
 	lw		t0		,20(a0)
 	sw		t0		,36($fp) 
-
-	#jal print_numbers
 
 	#D_RE
 	lW		a0		, 4($fp)
 	lw		t0		,16(a0)
 	sw		t0		,40($fp) 
 
-	#jal print_numbers
-
 	#LR_IM
 	lW		a0		, 4($fp)
 	lw		t0		,12(a0)
 	sw		t0		,44($fp) 
-
-	#jal print_numbers
 
 	#LR_RE
 	lW		a0		, 4($fp)
 	lw		t0		, 8(a0)
 	sw		t0		,48($fp) 
 
-	#jal print_numbers
-
 	#UL_IM
 	lW		a0		, 4($fp)
 	lw		t0		, 4(a0)
 	sw		t0		,52($fp) 
 
-	#jal print_numbers
-
 	#UL_RE
 	lW		a0		, 4($fp)
 	lw		t0		, 0(a0)
 	sw		t0		,56($fp) 
-
-	#jal print_numbers
 
 
 # Escritura del header del PGM
@@ -366,110 +347,6 @@ write_error:
 
 .end mips32_plot
 
-.ent print_numbers
-print_numbers:
-	# debugging info: descripcion del stack frame
-	.frame	$fp, 40, ra	# $fp: registro usado como frame pointer
-				# 40: tamañodel stack frame
-				# ra: registro que almacena el return address
-	# bloque para codigo PIC
-	.set	noreorder	# apaga reordenamiento de instrucciones
-	.cpload t9		# directiva usada para codigo PIC
-	.set	reorder		# enciende reordenamiento de instrucciones
-
-	# creo stack frame
-	subu	sp, sp, 40	# 4 (SRA) + 2 (LTA) + 4 (ABA)
-
-	# directiva para codigo PIC
-	.cprestore 24		# inserta aqui "sw gp, 24(sp)",
-				# mas "lw gp, 24(sp)" luego de cada jal.
-	# salvado de callee-saved regs en SRA	
-	sw	$fp, 28(sp)
-	sw	ra, 32(sp)
-
-	# de aqui al fin de la funcion uso $fp en lugar de sp.
-	move	$fp, sp
-	
-	# salvo 1er arg (siempre)
-	sw	a0, 40($fp)	# n: a0, sp+40
-
-	# r = n % 10;
-	remu	t0, a0, 10	# r: t0, sp+16	## remU
-	sw	t0, 16($fp)
-
-	# n /= 10;
-	lw	a0, 40($fp)			## redundante
-	divu	a0, a0, 10			## divU!
-	sw	a0, 40($fp)
-
-	## if (n > 0) 
-	lw	a0, 40($fp)			## redundante
-	beq	a0, zero, _write_numbers # n>0 equivale a n!=0 (n unsigned)
-	
-	#	print_numbers(n);
-	lw	a0, 40($fp)			## redundante
-	la	t9, print_numbers
-	jal	ra, t9
-
-_write_numbers:
-	# write(1, numbers[r], mystrlen(numbers[r]));
-	# calculo auxiliar: obtengo numbers[r]
-	lw	a0, 16($fp)	# r: a0, sp+16
-	sll	a0, a0, 2	# escalo r con tam de ptr (r*=4)
-	lw	a0, numbers(a0)	# numbers[r]: a0
-	sw	a0, 20($fp)	# almaceno numbers[r] en LTA
-	# obtengo mystrlen(numbers[r])
-	la	t9, mystrlen	# mystrlen(numbers[r])
-	jal	ra, t9
-	# cargo argumentos y nro de syscall
-	move	a2, v0
-	lw	a1, 20($fp)	# numbers[r] ## (por que no hago move a1, a0?)
-	li	a0, 1	
-	li	v0, SYS_write
-	syscall
-
-	# return;
-	# restauro callee-saved regs
-	lw	gp, 24(sp)
-	lw	$fp, 28(sp)
-	lw	ra, 32(sp)
-	# destruyo stack frame
-	addu	sp, sp, 40
-	# vuelvo a funcion llamante
-	jr	ra
-
-	.end	print_numbers
-	.size	print_numbers,.-print_numbers
-
-
-.ent mystrlen
-mystrlen:
-	.frame $fp, 16, ra
-	.set noreorder
-	.cpload t9
-	.set reorder
-	subu sp, sp, 16
-	.cprestore 0
-	sw $fp, 4(sp)
-	move $fp, sp
-
-	#USO V0 para el resultado de mystrlen
-	li v0, 0
-mystrlen_loop:
-	lb t0, 0(a0)
-	beqz t0, mystrlen_return
-	addiu a0, a0, 1
-	addiu v0, v0, 1
-	j mystrlen_loop
-mystrlen_return:
-	#Destruimos el frame
-	lw $fp, 4(sp)
-	addu sp, sp, 16
-	#retorno
-	j ra
-	.end mystrlen
-
-
 .data
 
 PGM:	.asciiz "P2\n"
@@ -491,25 +368,4 @@ D_IM:	.asciiz	"d_im"
 print:      .asciiz "The value is: %d\n"
 print_f:      .asciiz "The value is: %f\n"
 
-numbers: 
-		.word number_0, number_1, number_2, number_3, number_4, number_5, number_6, number_7, number_8, number_9
-		.size number, 40
-
-number_0: .asciiz "0"
-number_1: .asciiz "1"
-number_2: .asciiz "2"
-number_3: .asciiz "3"
-number_4: .asciiz "4"
-number_5: .asciiz "5"
-number_6: .asciiz "6"
-number_7: .asciiz "7"
-number_8: .asciiz "8"
-number_9: .asciiz "9"
-
 error: .asciiz "I/O Error\n"
-
-#PRINT VALUE SNIPPET
-#	la      a0,print
-#	move    a1,t0
-#	lw      t9,%call16(printf)(gp)
-#	jalr    t9
