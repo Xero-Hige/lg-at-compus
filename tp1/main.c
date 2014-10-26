@@ -31,7 +31,7 @@ extern void mips32_plot(param_t *);
  * Parámetros globales.
  */
 
-int x_res = 640;		/* Ancho de imagen por defecto. */
+int x_res = 1024;		/* Ancho de imagen por defecto. */
 int y_res = 480;		/* Alto de imagen, por defecto. */
 float upper_left_re = -0.65;	/* Extremo superior izquierzo (re). */
 float upper_left_im = +0.30;	/* Extremo superior izquierzo (im). */
