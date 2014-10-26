@@ -36,7 +36,6 @@ parse_args:
 	#FD
 	lw		a0		, 4($fp)
 	lw		t0		,36(a0)		#Sumo el offset al puntero para obtener el FILE*
-	#li 		t1		,1
 	lh		t1		,14(t0)			#Recupero el fd de la estructura FILE. Como es un short recupero un halfword
 	sw		t1		,20($fp) #TODO: VER, guardo el "file pointer" (descriptor) en la LTA
 
@@ -138,7 +137,7 @@ write_header:
 	syscall
 	blt     v0		,a2		, write_error
 	bne		a3		,zero		,write_error
-
+	
 	#Y resolution
 	lw 		a0		,28($fp)
 
@@ -214,6 +213,7 @@ shades:
 	l.s 	$f26	,52($fp)#	CI
 
 plot_loop_y:
+
 	#y < parms->y_res; 
 	lw		t0		,28($fp)
 	beq		t0		,t8		,end_plot_loop_y
@@ -223,6 +223,17 @@ plot_loop_y:
 	l.s 	$f24	,56($fp)#  CR
 
 plot_loop_x:
+	#DEBUG
+	la		a1		,DEBUG
+	lw		a0		,20($fp)
+	li 		a2		,6
+	li		v0		,SYS_write
+
+	syscall
+	blt     v0		,a2		, write_error
+	bne		a3		,zero		,write_error
+	#END_DEBUG
+
 	#x < parms->x_res; 
 	lw		t0		,32($fp)
 	beq		t0		,t9		,end_plot_loop_x
@@ -240,6 +251,7 @@ plot_loop_x:
 
 
 shining_loop:
+
 	beq		t0		,zero 	,end_of_shining_loop
 
 	li.s  	$f0		,4.0
@@ -276,7 +288,6 @@ end_of_shining_loop:
 
 # Imprime el brillo del pixel actual, tiene que estar guardado en la LTA
 print_shining:
-	#addi a0	,t0, -255
 	move a0, t0
 
 	rem		t0		,a0		,10
@@ -359,6 +370,7 @@ write_error:
 .data
 
 PGM:	.asciiz "P2\n"
+DEBUG:	.asciiz "DEBUG\n"
 ENDL:	.asciiz "\n"
 
 
