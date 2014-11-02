@@ -6,9 +6,19 @@
 .globl mips32_plot
 .ent mips32_plot
 
+#define STACK_SIZE 64
+
+#define	A0 	64
+#define	A1 	68
+#define	A2 	72
+#define A3 	76
+
+#define RA  60
+#define FP 	56
+
 # void mips32_plot(param_t *parms)
 mips32_plot:
-	.frame	$fp		,64		,ra #TODO: Probablemente se requiera mas para guardar los floating point regs
+	.frame	$fp		,64		,ra
 	#Bloque para código PIC
 	.set noreorder
 	.cpload t9
@@ -18,69 +28,69 @@ mips32_plot:
 	#Directiva para código PIC
 	.cprestore		24 
 	# Guardo el ra y el fp
-	sw		ra		, 64(sp)
-	sw		$fp		, 60(sp)
+	sw		ra		, RA(sp)
+	sw		$fp		, FP(sp)
 	# Actualizo frame pointer con el stack pointer actual
 	# De aquí en más de usa $fp en lugar de sp
 	move	$fp		,sp
 	# Guardo los argumentos
-	sw		a0		, 4($fp)
-	sw		a1		, 8($fp)
-	sw		a2		, 12($fp)
-	sw		a3		, 16($fp)
+	sw		a0		, A0($fp)
+	sw		a1		, A1($fp)
+	sw		a2		, A2($fp)
+	sw		a3		, A3($fp)
 
 # Lectura de los parametros desde la estuctura parametro
 parse_args:
 	#TODO: Suponer que pasado este punto se tienen todos los parametros parseados y los necesarios en LTA
 	
 	#FD
-	lw		a0		, 4($fp)
+	lw		a0		,A0($fp)
 	lw		t0		,36(a0)		#Sumo el offset al puntero para obtener el FILE*
 	lh		t1		,14(t0)			#Recupero el fd de la estructura FILE. Como es un short recupero un halfword
 	sw		t1		,20($fp) #TODO: VER, guardo el "file pointer" (descriptor) en la LTA
 
 	#SHADES
-	lw		a0		, 4($fp)
+	lw		a0		,A0($fp)
 	lw		t0		,32(a0)
 	sw		t0		,24($fp) 
 
 	#Y_RES
-	lW		a0		, 4($fp)
+	lW		a0		,A0($fp)
 	lw		t0		,28(a0)
 	sw		t0		,28($fp) 
 
 	#X_RES
-	lW		a0		, 4($fp)
+	lW		a0		,A0($fp)
 	lw		t0		,24(a0)
 	sw		t0		,32($fp) 
 
 	#D_IM
-	lW		a0		, 4($fp)
+	lW		a0		,A0($fp)
 	lw		t0		,20(a0)
 	sw		t0		,36($fp) 
 
 	#D_RE
-	lW		a0		, 4($fp)
+	lW		a0		,A0($fp)
 	lw		t0		,16(a0)
 	sw		t0		,40($fp) 
 
 	#LR_IM
-	lW		a0		, 4($fp)
+	lW		a0		,A0($fp)
 	lw		t0		,12(a0)
 	sw		t0		,44($fp) 
 
 	#LR_RE
-	lW		a0		, 4($fp)
+	lW		a0		,A0($fp)
 	lw		t0		, 8(a0)
 	sw		t0		,48($fp) 
 
 	#UL_IM
-	lW		a0		, 4($fp)
+	lW		a0		,A0($fp)
 	lw		t0		, 4(a0)
 	sw		t0		,52($fp) 
 
 	#UL_RE
-	lW		a0		, 4($fp)
+	lW		a0		,A0($fp)
 	lw		t0		, 0(a0)
 	sw		t0		,56($fp) 
 
@@ -338,13 +348,13 @@ end_plot_loop_y:
 # Fin de la ejecucion de la funcion
 end:
 	# Recupero ra y fp del stack
-	lw		ra		,64($fp)
-	lw		$fp		,60($fp)
+	lw		ra		,RA($fp)
+	lw		$fp		,FP($fp)
 	# Recupero los argumentos originales del stack
-	lw		a0		, 4(sp)
-	lw		a1		, 8(sp)
-	lw		a2		,12(sp)
-	lw		a3		,16(sp)
+	lw		a0		,A0(sp)
+	lw		a1		,A1(sp)
+	lw		a2		,A2(sp)
+	lw		a3		,A3(sp)
 	# "Destruyo" el area de stack
 	addu	sp		,sp		,64
 
