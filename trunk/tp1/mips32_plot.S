@@ -6,25 +6,25 @@
 .globl mips32_plot
 .ent mips32_plot
 
-#define STACK_SIZE 64
+#define STACK_SIZE 72
 
-#define	A0 	64
-#define	A1 	68
-#define	A2 	72
-#define A3 	76
+#define	A0 	72
+#define	A1 	76
+#define	A2 	80
+#define A3 	84
 
-#define RA  60
-#define FP 	56
+#define RA  68
+#define FP 	64
 
 # void mips32_plot(param_t *parms)
 mips32_plot:
-	.frame	$fp		,64		,ra
+	.frame	$fp		,STACK_SIZE		,ra
 	#Bloque para código PIC
 	.set noreorder
 	.cpload t9
 	.set reorder
 	#Creación de stack frame
-	subu	sp		,sp		,64
+	subu	sp		,sp		,STACK_SIZE
 	#Directiva para código PIC
 	.cprestore		24 
 	# Guardo el ra y el fp
@@ -356,7 +356,7 @@ end:
 	lw		a2		,A2(sp)
 	lw		a3		,A3(sp)
 	# "Destruyo" el area de stack
-	addu	sp		,sp		,64
+	addu	sp		,sp		,STACK_SIZE
 
 	# Retorno a la funcion que llamo
 	jr		ra
