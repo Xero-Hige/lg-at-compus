@@ -220,32 +220,26 @@ shades:
 # Ciclo para recorrer todos los puntos
 	#for (y = 0, ci = parms->UL_im; 
 	li 		t8		,0  	#	y = 0
+	sw 		t8		,16($fp)
 	l.s 	$f26	,52($fp)#	CI
 
 plot_loop_y:
 
 	#y < parms->y_res; 
 	lw		t0		,28($fp)
+	lw      t8		,16($fp)
 	beq		t0		,t8		,end_plot_loop_y
 
 	#for (x = 0, cr = parms->UL_re; 
 	li 		t9		,0 		#  x = 0
+	sw   	t9		,12($fp)
 	l.s 	$f24	,56($fp)#  CR
 
 plot_loop_x:
-	#DEBUG
-	la		a1		,DEBUG
-	lw		a0		,20($fp)
-	li 		a2		,6
-	li		v0		,SYS_write
-
-	syscall
-	blt     v0		,a2		, write_error
-	bne		a3		,zero		,write_error
-	#END_DEBUG
 
 	#x < parms->x_res; 
 	lw		t0		,32($fp)
+	lw 		t9		,12($fp)
 	beq		t0		,t9		,end_plot_loop_x
 
 
@@ -328,7 +322,10 @@ print_shining:
 	bne		a3		,zero		,write_error
 
 	#++x, cr += parms->d_re) {
+	lw 		t9		,12($fp)
 	addiu	t9		,t9		,1 #x++
+	sw 		t9		,12($fp)
+
 	l.s		$f0		,40($fp)
 	add.s	$f24	,$f24	,$f0
 	b plot_loop_x
@@ -336,15 +333,16 @@ print_shining:
 
 end_plot_loop_x:
 	#++y, ci -= parms->d_im) {
+	lw  	t8		,16($fp)
 	addiu	t8		,t8		,1 #y++
+	sw 		t8		,16($fp)
+	
 	l.s		$f0		,36($fp)
 	add.s	$f26	,$f26	,$f0
 	b plot_loop_y
 
 end_plot_loop_y:
 	
-
-
 # Fin de la ejecucion de la funcion
 end:
 	# Recupero ra y fp del stack
