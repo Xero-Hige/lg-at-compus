@@ -245,7 +245,8 @@ plot_loop_x:
 
 
 # Ciclo para calcular el brillo de un punto
-	lw 		t0		,24($fp)
+	li 		t0		,0
+	lw     t1      ,24($fp)
 
 	#zr = cr;
 	#zi = ci;
@@ -256,22 +257,16 @@ plot_loop_x:
 
 shining_loop:
 
-	beq		t0		,zero 	,end_of_shining_loop
+	beq		t0		,t1 	,end_of_shining_loop
 
 	mul.s 	$f2 	,$f28	,$f28 #zr*zr
  	mul.s 	$f4		,$f30 	,$f30 #zi*zi
 
-	add.s 	$f6 	,$f2 	,$f4
+	add.s 	$f6 	,$f2 	,$f4 #zr*zr + zi*zi
 
 	li.s  	$f0		,4.0
 	c.lt.s 	$f0 	,$f6
 	bc1t	end_of_shining_loop		#4 es menor que zr*zr+zi*zi
-
-
-	li.s  	$f0		,-4.0
-	c.lt.s 	$f6 	,$f0
-	bc1t	end_of_shining_loop		#-4 es mayor que zr*zr+zi*zi
-
 
 	#sr = (zr * zr * zr) - (3 * zi * zi * zr) + cr;
 	mul.s 	$f8 	,$f2 	,$f28 #zr*zr*zr
@@ -299,7 +294,7 @@ shining_loop:
 	mov.s 	$f28	,$f8
 	mov.s 	$f30 	,$f12
 
-	subu	t0		,t0		,1
+	addiu	t0		,t0		,1
 	b 		shining_loop
 
 end_of_shining_loop:
@@ -352,7 +347,7 @@ end_plot_loop_x:
 	sw 		t8		,16($fp)
 	
 	l.s		$f0		,36($fp)
-	add.s	$f26	,$f26	,$f0
+	sub.s	$f26	,$f26	,$f0
 	b plot_loop_y
 
 end_plot_loop_y:
@@ -392,7 +387,6 @@ write_error:
 .data
 
 PGM:	.asciiz "P2\n"
-DEBUG:	.asciiz "DEBUG\n"
 ENDL:	.asciiz "\n"
 
 
