@@ -135,18 +135,33 @@ sse_plot(param_t *parms)
 			"increment:              \n\t"
 			"addps    %%xmm1, %%xmm0 \n\t" /* xmm0: ITER */
 
-			/* Calculate Z = Z^2 + C. */
-			"Z_eq_Z2_plus_C:         \n\t"
-			"subps    %%xmm5, %%xmm4 \n\t" /* xmm4: ZR^2 - ZI^2 */
+			/* Calculate Z = Z^3 + C. */
+			"Z_eq_Z3_plus_C:         \n\t"
 
-			"movaps   %%xmm2, %%xmm6 \n\t" /* xmm6: ZR */
-			"mulps    %%xmm3, %%xmm6 \n\t" /* xmm6: ZR*ZI */
-			"addps    %%xmm6, %%xmm6 \n\t" /* xmm6: 2*ZR*ZI */
+			"movaps	  %%xmm4, %%xmm6\n\t"  /* xmm6: ZR^2 */
+			"movaps	  %%xmm5, %%xmm7\n\t"  /* xmm7: ZI^2 */
 
-			"addps    %3, %%xmm4     \n\t" /* xmm4: += CR */
-			"addps    %4, %%xmm6     \n\t" /* xmm6: += CI */
-			"movaps   %%xmm4, %%xmm2 \n\t" /* xmm2: new ZR */
-			"movaps   %%xmm6, %%xmm3 \n\t" /* xmm3: new ZI */
+			"mulps    %%xmm2, %%xmm6 \n\t" /* xmm6: ZR^3 */
+			"mulps    %%xmm3, %%xmm7 \n\t" /* xmm7: ZI^3 */
+
+			"mulps    %%xmm3, %%xmm4 \n\t" /* xmm4: ZR*ZI^2*/
+			"mulps    %%xmm2, %%xmm5 \n\t" /* xmm5: ZI*ZR^2*/
+
+			"subps	  %%xmm4, %%xmm6 \n\t"
+			"subps	  %%xmm4, %%xmm6 \n\t"
+			"subps	  %%xmm4, %%xmm6 \n\t" /* xmm6: ZR^3-3*ZR*ZI^2*/
+
+			"movaps	  %%xmm5, %%xmm4\n\t"  /* xmm4: ZI*ZR^2*/
+
+			"addps	  %%xmm4, %%xmm5\n\t"
+			"addps	  %%xmm4, %%xmm5\n\t"  /* xmm5: 3*ZI*ZR^2*/
+
+			"subps	  %%xmm7, %%xmm5 \n\t" /* xmm5: 3*ZI*ZR^2 - ZI^3*/
+
+			"addps    %3, %%xmm6     \n\t" /* xmm4: += CR */
+			"addps    %4, %%xmm5     \n\t" /* xmm6: += CI */
+			"movaps   %%xmm6, %%xmm2 \n\t" /* xmm2: new ZR */
+			"movaps   %%xmm5, %%xmm3 \n\t" /* xmm3: new ZI */
 
 			"jmp      loop           \n\t"
 
