@@ -1,10 +1,10 @@
 # Do not edit -- this file documents how this program was built for your machine.
 SYSTYPE	= LINUX3
-SYSLIBS	= -lpthread -msse
-CC	= gcc $(WARN) -g -DUSE_SSE_ASSEMBLY -msse
+SYSLIBS	= -lc -lpthread
+CC	= gcc $(WARN) -pg
 OPT	= -O
 DEBUG	= -g
-EXPORT	= AUXLIBS='' CCARGS='-g -DUSE_SSE_ASSEMBLY -msse' OPT='-O' DEBUG='-g'
+EXPORT	= AUXLIBS='-lc' CCARGS='-pg' OPT='-O' DEBUG='-g'
 WARN	= -Wall
 SHELL	= /bin/sh
 DEFS    = -I. -D$(SYSTYPE)
