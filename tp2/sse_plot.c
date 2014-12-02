@@ -144,19 +144,19 @@ sse_plot(param_t *parms)
 			"mulps    %%xmm2, %%xmm6 \n\t" /* xmm6: ZR^3 */
 			"mulps    %%xmm3, %%xmm7 \n\t" /* xmm7: ZI^3 */
 
-			"mulps    %%xmm3, %%xmm4 \n\t" /* xmm4: ZR*ZI^2*/
-			"mulps    %%xmm2, %%xmm5 \n\t" /* xmm5: ZI*ZR^2*/
+			"mulps    %%xmm3, %%xmm4 \n\t" /* xmm4: ZI*ZR^2*/
+			"mulps    %%xmm2, %%xmm5 \n\t" /* xmm5: ZR*ZI^2*/
 
-			"subps	  %%xmm4, %%xmm6 \n\t"
-			"subps	  %%xmm4, %%xmm6 \n\t"
-			"subps	  %%xmm4, %%xmm6 \n\t" /* xmm6: ZR^3-3*ZR*ZI^2*/
+			"subps	  %%xmm5, %%xmm6 \n\t"
+			"subps	  %%xmm5, %%xmm6 \n\t"
+			"subps	  %%xmm5, %%xmm6 \n\t" /* xmm6: ZR^3-3*ZR*ZI^2*/
 
-			"movaps	  %%xmm5, %%xmm4\n\t"  /* xmm4: ZI*ZR^2*/
+			"movaps	  %%xmm4, %%xmm5\n\t"  /* xmm5: ZI*ZR^2*/
 
 			"addps	  %%xmm4, %%xmm5\n\t"
 			"addps	  %%xmm4, %%xmm5\n\t"  /* xmm5: 3*ZI*ZR^2*/
 
-			"subps	  %%xmm7, %%xmm5 \n\t" /* xmm5: 3*ZI*ZR^2 - ZI^3*/
+			"subps	  %%xmm7, %%xmm5 \n\t" /* xmm7: 3*ZI*ZR^2 - ZI^3*/
 
 			"addps    %3, %%xmm6     \n\t" /* xmm4: += CR */
 			"addps    %4, %%xmm5     \n\t" /* xmm6: += CI */
